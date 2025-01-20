@@ -1,19 +1,21 @@
 import { useEffect, useState } from "react";
 import axiosInstance from "../../utils/axiosInstance";
+import { motion } from "framer-motion";
+import { BiBriefcase, BiCalendar, BiDollar } from "react-icons/bi";
 
 type Job = {
   title: string;
   description: string;
   skillsRequired: string[];
   budget: string;
-  createdAt: string; 
+  createdAt: string;
   employer: string;
   status: string;
   _id: string;
-}
+};
 
 const Home = () => {
-  const [jobs, setJobs] = useState<Job[]>([]); 
+  const [jobs, setJobs] = useState<Job[]>([]);
 
   useEffect(() => {
     const getJobs = async () => {
@@ -29,37 +31,71 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="w-full max-w-8xl mx-auto  rounded-lg shadow-lg overflow-hidden">
+    <section className="space-y-6 p-4">
       {jobs.map((job, index) => (
-        <div key={index} className="p-6">
-          <div className="mb-4">
-            <h1 className="text-3xl font-semibold text-gray-800 mb-2">
-              {job.title}
-            </h1>
-            <p className="text-gray-600 mb-4">{job.description}</p>
-            {job.skillsRequired.map((skill, idx) => (
-              <span
-                key={idx}
-                className="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm"
-              >
-                {skill}
-              </span>
-            ))}
-          </div>
+        <motion.div
+          key={index}
+          className="group relative w-full bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 overflow-hidden"
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.3, delay: index * 0.1 }}
+        >
+          {/* Hover effect background */}
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-indigo-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-          <div className="flex justify-between items-center">
-            <div>
-              <h2 className="text-xl font-medium text-gray-800">Budget</h2>
-              <p className="text-gray-600 text-sm">{job.budget}</p>
+          {/* Content */}
+          <div className="relative p-6">
+            <div className="flex justify-between items-start">
+              <div className="space-y-1">
+                <h2 className="text-xl font-semibold text-gray-900 group-hover:text-blue-600 transition-colors duration-300">
+                  {job.title}
+                </h2>
+                <div className="flex items-center text-gray-500 space-x-4">
+                  <div className="flex items-center space-x-1">
+                    <BiBriefcase className="w-4 h-4" />
+                    <span className="text-sm">{job.employer}</span>
+                  </div>
+                  <div className="flex items-center space-x-1">
+                    <BiCalendar className="w-4 h-4" />
+                    <span className="text-sm">
+                      {new Date(job.createdAt).toLocaleDateString()}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center">
+                <BiDollar className="w-5 h-5 text-green-600" />
+                <span className="text-lg font-medium text-green-600">
+                  {job.budget}
+                </span>
+              </div>
             </div>
-            <div>
-              <h3 className="text-xl font-medium text-gray-800">Created At</h3>
-              <p className="text-gray-600 text-sm">{new Date(job.createdAt).toLocaleDateString()}</p>
+
+            <p className="mt-4 text-gray-600 leading-relaxed">
+              {job.description}
+            </p>
+
+            <div className="mt-6 flex justify-between">
+              <div className="flex flex-wrap gap-2">
+                {job.skillsRequired.map((skill, idx) => (
+                  <span
+                    key={idx}
+                    className="px-3 py-1 text-sm bg-blue-50 text-center align-middle text-blue-700 rounded-full hover:bg-blue-100 transition-colors duration-200"
+                  >
+                    {skill}
+                  </span>
+                ))}
+              </div>
+
+              <div>
+                <button className="bg-green-200 text-black px-4 py-2 rounded-md">Apply</button>
+              </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       ))}
-    </div>
+    </section>
   );
 };
 
