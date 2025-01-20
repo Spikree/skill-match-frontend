@@ -51,7 +51,7 @@ const Sidebar = () => {
               <span className="text-white font-bold text-xl">S</span>
             </div>
             {isOpen && (
-              <span className="ml-3 text-white font-semibold">SkillShare</span>
+              <span className="ml-3 text-white font-semibold">Skill Match</span>
             )}
           </div>
         </div>
