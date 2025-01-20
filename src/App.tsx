@@ -10,7 +10,7 @@ import SidebarLayout from "./SidebarLayout";
 
 const App = () => {
   return (
-    <div>
+    <div className="">
       <ToastContainer />
       <Routes>
         <Route path="/" element={<LandingPage />} />

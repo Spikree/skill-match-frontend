@@ -14,7 +14,7 @@ import {
 } from "react-icons/fi";
 
 const Sidebar = () => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [showProfileOptions, setShowProfileOptions] = useState(false);
   const navigate = useNavigate();
 
@@ -40,7 +40,7 @@ const Sidebar = () => {
       >
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="absolute -right-3 top-8 bg-gray-800 text-white rounded-full p-1.5 border border-gray-600 hover:bg-gray-700 focus:outline-none"
+          className="sm:flex hidden absolute -right-3 top-8 bg-gray-800 text-white rounded-full p-1.5 border border-gray-600 hover:bg-gray-700 focus:outline-none"
         >
           {isOpen ? <FiChevronLeft size={16} /> : <FiChevronRight size={16} />}
         </button>
@@ -88,7 +88,7 @@ const Sidebar = () => {
                       onClick={option.action}
                     >
                       <span className="text-gray-400">{option.icon}</span>
-                      <span className="text-sm">{option.title}</span>
+                      {isOpen && <span className="text-sm">{option.title}</span>}
                     </button>
                   ))}
                 </div>
