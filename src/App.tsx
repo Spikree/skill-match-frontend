@@ -6,6 +6,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Home from "./pages/Home";
 import ProtectedRoutes from "../utils/protectedRoutes";
+import SidebarLayout from "./SidebarLayout";
 
 const App = () => {
   return (
@@ -15,9 +16,11 @@ const App = () => {
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/create-account" element={<CreateAccount />} />
-        
+
         <Route element={<ProtectedRoutes />}>
-          <Route path="/home" element={<Home />} />
+          <Route element={<SidebarLayout />}>
+            <Route path="/home" element={<Home />} />
+          </Route>
         </Route>
       </Routes>
     </div>
