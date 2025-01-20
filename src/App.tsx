@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Home from "./pages/Home";
 import ProtectedRoutes from "../utils/protectedRoutes";
 import SidebarLayout from "./SidebarLayout";
+import Job from "./pages/Job";
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
         <Route element={<ProtectedRoutes />}>
           <Route element={<SidebarLayout />}>
             <Route path="/home" element={<Home />} />
+            <Route path="/job/:jobId" element={<Job />} />
           </Route>
         </Route>
       </Routes>

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axiosInstance from "../../utils/axiosInstance";
 import { motion } from "framer-motion";
 import { BiBriefcase, BiCalendar, BiDollar, BiSearch } from "react-icons/bi";
+import { useNavigate } from "react-router-dom";
 
 type Job = {
   title: string;
@@ -17,6 +18,7 @@ type Job = {
 
 const Home = () => {
   const [jobs, setJobs] = useState<Job[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getJobs = async () => {
@@ -39,7 +41,7 @@ const Home = () => {
           placeholder="Search"
           className="flex-grow px-6 py-2 text-sm text-gray-800 bg-transparent focus:outline-none placeholder-gray-400 rounded-md"
         />
-        <button className="p-2 bg-blue-500 text-white hover:bg-blue-600 focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 rounded-full">
+        <button className="p-2 hidden sm:block bg-blue-500 text-white hover:bg-blue-600 focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 rounded-full">
           <BiSearch className="w-5 h-5" />
         </button>
       </div>
@@ -102,7 +104,7 @@ const Home = () => {
                     ))}
                   </div>
 
-                  <button className="bg-green-200 text-black px-4 py-2 rounded-md hover:bg-green-300 transition-colors duration-200 w-full sm:w-auto">
+                  <button onClick={() => {navigate(`/job/${job._id}`)}} className="bg-green-200 text-black px-4 py-2 rounded-md hover:bg-green-300 transition-colors duration-200 w-full sm:w-auto">
                     send proposal
                   </button>
                 </div>

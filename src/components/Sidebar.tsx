@@ -2,21 +2,24 @@ import { useState } from "react";
 import { MdWorkHistory } from "react-icons/md";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { 
-  FiChevronLeft, 
-  FiChevronRight, 
-  FiBriefcase, 
-  FiBook, 
+import {
+  FiChevronLeft,
+  FiChevronRight,
+  FiBriefcase,
+  FiBook,
   FiStar,
   FiUser,
   FiSettings,
-  FiLogOut  
+  FiLogOut,
 } from "react-icons/fi";
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showProfileOptions, setShowProfileOptions] = useState(false);
   const navigate = useNavigate();
+
+  const username = localStorage.getItem("username");
+  const useremail = localStorage.getItem("useremail");
 
   const menuItems = [
     { title: "Applied Jobs", icon: <FiBriefcase size={20} /> },
@@ -27,8 +30,15 @@ const Sidebar = () => {
 
   const profileOptions = [
     { title: "Profile", icon: <FiUser size={16} />, action: () => {} },
-    { title: "Settings", icon: <FiSettings size={16} /> , action: () => {}},
-    { title: "Logout", icon: <FiLogOut size={16} />, action: () => {localStorage.removeItem("token"); navigate('/login')} },
+    { title: "Settings", icon: <FiSettings size={16} />, action: () => {} },
+    {
+      title: "Logout",
+      icon: <FiLogOut size={16} />,
+      action: () => {
+        localStorage.removeItem("token");
+        navigate("/login");
+      },
+    },
   ];
 
   return (
@@ -56,7 +66,12 @@ const Sidebar = () => {
           </div>
         </div>
 
-        <div className="flex flex-col p-4 gap-2" onClick={() => {setShowProfileOptions(false)}}>
+        <div
+          className="flex flex-col p-4 gap-2"
+          onClick={() => {
+            setShowProfileOptions(false);
+          }}
+        >
           {menuItems.map((item, index) => (
             <button
               key={index}
@@ -64,7 +79,9 @@ const Sidebar = () => {
             >
               <span className="text-gray-400">{item.icon}</span>
               {isOpen && (
-                <motion.span className="ml-3 font-medium">{item.title}</motion.span>
+                <motion.span className="ml-3 font-medium">
+                  {item.title}
+                </motion.span>
               )}
             </button>
           ))}
@@ -80,7 +97,12 @@ const Sidebar = () => {
                 transition={{ duration: 0.2 }}
                 className="absolute bottom-full mb-2 w-full px-4"
               >
-                <div onClick={() => {setShowProfileOptions(!showProfileOptions)}} className="bg-gray-700 rounded-lg shadow-lg overflow-hidden">
+                <div
+                  onClick={() => {
+                    setShowProfileOptions(!showProfileOptions);
+                  }}
+                  className="bg-gray-700 rounded-lg shadow-lg overflow-hidden"
+                >
                   {profileOptions.map((option, index) => (
                     <button
                       key={index}
@@ -88,7 +110,9 @@ const Sidebar = () => {
                       onClick={option.action}
                     >
                       <span className="text-gray-400">{option.icon}</span>
-                      {isOpen && <span className="text-sm">{option.title}</span>}
+                      {isOpen && (
+                        <span className="text-sm">{option.title}</span>
+                      )}
                     </button>
                   ))}
                 </div>
@@ -96,16 +120,21 @@ const Sidebar = () => {
             )}
           </AnimatePresence>
 
-          <div 
-            onClick={() => setShowProfileOptions(!showProfileOptions)} 
+          <div
+            onClick={() => setShowProfileOptions(!showProfileOptions)}
             className="p-4 border-t border-gray-700 cursor-pointer hover:bg-gray-700 transition-colors"
           >
             <div className="flex items-center">
-              <div className="h-8 w-8 rounded-full bg-gray-600"></div>
+              <div className="h-8 w-8 rounded-full bg-gray-600 text-white flex justify-center items-center">
+                {username?.charAt(0).toUpperCase()}
+              </div>
+
               {isOpen && (
                 <div className="ml-3">
-                  <p className="text-sm font-medium text-gray-300">User Name</p>
-                  <p className="text-xs text-gray-500">user@example.com</p>
+                  <p className="text-sm font-medium text-gray-300">
+                    {username}
+                  </p>
+                  <p className="text-xs text-gray-500">{useremail}</p>
                 </div>
               )}
             </div>
