@@ -11,6 +11,7 @@ type Job = {
   createdAt: string;
   employer: string;
   status: string;
+  employerName: string;
   _id: string;
 };
 
@@ -66,7 +67,7 @@ const Home = () => {
                     <div className="flex flex-wrap items-center text-gray-500 gap-4">
                       <div className="flex items-center space-x-1">
                         <BiBriefcase className="w-4 h-4 flex-shrink-0" />
-                        <span className="text-sm">{job.employer}</span>
+                        <span className="text-sm">{job.employerName}</span>
                       </div>
                       <div className="flex items-center space-x-1">
                         <BiCalendar className="w-4 h-4 flex-shrink-0" />
