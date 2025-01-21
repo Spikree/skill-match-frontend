@@ -124,7 +124,7 @@ const LandingPage = () => {
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
             <Link
-              to="/create-account"
+              to="/login"
               className="inline-flex items-center justify-center px-8 py-3 text-base font-medium text-white bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all duration-200"
             >
               Get Started <FaArrowRight className="ml-2" />

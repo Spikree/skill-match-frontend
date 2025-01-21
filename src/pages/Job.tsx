@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
 import axiosInstance from "../../utils/axiosInstance";
 import { useParams } from "react-router-dom";
 import {
@@ -8,6 +9,7 @@ import {
   FaCrosshairs,
   FaSpinner,
 } from "react-icons/fa";
+import ApplyModal from "../components/ApplyModal";
 
 type Job = {
   title: string;
@@ -24,6 +26,7 @@ type Job = {
 const Job = () => {
   const [job, setJob] = useState<Job | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
   const { jobId } = useParams();
 
   useEffect(() => {
@@ -39,6 +42,23 @@ const Job = () => {
     };
     getJob();
   }, [jobId]);
+
+  const toggleModal = () => {
+    setShowModal((prev) => !prev);
+  };
+
+  const applyToJob = async (bidAmount: string, coverLetter: string) => {
+    try {
+      const response = await axiosInstance.post(`/proposal/submit/${jobId}`, {
+        bidAmount,
+        coverLetter,
+      });
+      console.log(response);
+      toast.success(response.data.message);
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -63,6 +83,7 @@ const Job = () => {
 
   return (
     <div className="h-full overflow-y-scroll">
+      <ToastContainer />
       <div className="max-w-4xl mx-auto space-y-6">
         <div className="bg-white rounded-lg shadow-lg p-6">
           <div className="space-y-4">
@@ -141,10 +162,16 @@ const Job = () => {
             </div>
           </div>
         </div>
-        <button className="px-4 py-2 bg-green-300 text-center pb-2 rounded-md">
+        <button
+          onClick={toggleModal}
+          className="px-4 py-2 bg-green-300 text-center pb-2 rounded-md"
+        >
           Apply
         </button>
       </div>
+      {showModal && (
+        <ApplyModal applyToJob={applyToJob} toggleModal={toggleModal} />
+      )}
     </div>
   );
 };

@@ -22,10 +22,10 @@ const Sidebar = () => {
   const useremail = localStorage.getItem("useremail");
 
   const menuItems = [
-    { title: "Applied Jobs", icon: <FiBriefcase size={20} /> },
-    { title: "Finished Jobs", icon: <MdWorkHistory size={20} /> },
-    { title: "Saved Jobs", icon: <FiBook size={20} /> },
-    { title: "Current Job", icon: <FiStar size={20} /> },
+    { title: "Applied Jobs", icon: <FiBriefcase size={20} />, to: "/appliedjobs" },
+    { title: "Finished Jobs", icon: <MdWorkHistory size={20} />, to: "#" },
+    { title: "Saved Jobs", icon: <FiBook size={20} />, to: "#"},
+    { title: "Current Job", icon: <FiStar size={20} />,to: "#" },
   ];
 
   const profileOptions = [
@@ -75,6 +75,7 @@ const Sidebar = () => {
           {menuItems.map((item, index) => (
             <button
               key={index}
+              onClick={() => navigate(item.to)}
               className="flex items-center text-gray-300 hover:bg-gray-700 rounded-lg px-4 py-3 transition-colors duration-200"
             >
               <span className="text-gray-400">{item.icon}</span>

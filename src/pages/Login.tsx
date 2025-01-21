@@ -26,8 +26,8 @@ const Login = () => {
       const response = await axiosInstance.post("/auth/login", userData);
       toast.success(response.data.message);
       localStorage.setItem("token", response.data.token);
-      localStorage.setItem("username", response.data.user.profile.name)
-      localStorage.setItem("useremail", response.data.user.email)
+      localStorage.setItem("username", response.data.user.profile.name);
+      localStorage.setItem("useremail", response.data.user.email);
       navigate("/home");
     } catch (error) {
       toast.error(error?.response?.data.message);
