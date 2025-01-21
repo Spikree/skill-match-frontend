@@ -1,24 +1,18 @@
 import { useEffect, useState } from "react";
 import axiosInstance from "../../utils/axiosInstance";
-import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import {
-  Calendar,
-  DollarSign,
-  Clock,
-  CheckCircle,
-  XCircle,
-  Briefcase,
+  Bookmark,
   ChevronDown,
+  Briefcase,
 } from "lucide-react";
 
-type Job = {
-  bidAmount: string;
-  coverLetter: string;
+type allSavedJobs = {
   freelancer: string;
-  job: string;
-  status: string;
-  submittedAt: string;
+  jobDescription: string;
+  jobId: string;
+  jobTitle: string;
   _id: string;
 };
 
@@ -35,18 +29,18 @@ const containerVariants = {
 
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
-  show: {
-    opacity: 1,
+  show: { 
+    opacity: 1, 
     y: 0,
     transition: {
       type: "spring",
       stiffness: 100,
-    },
+    }
   },
 };
 
-const AppliedJobs = () => {
-  const [appliedJobs, setAppliedJobs] = useState<Job[]>([]);
+const SavedJobs = () => {
+  const [savedJobs, setSavedJobs] = useState<allSavedJobs[]>([]);
   const [expandedJob, setExpandedJob] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -54,56 +48,22 @@ const AppliedJobs = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const getAppliedJobs = async () => {
+    const getSavedJobs = async () => {
       try {
         setIsLoading(true);
-        const response = await axiosInstance.get("/proposal/getAppliedJobs");
-        setAppliedJobs(response.data.appliedJobs);
+        const response = await axiosInstance("/job/getSavedJobs");
+        setSavedJobs(response.data.allSavedJobs);
         setError(null);
       } catch (error) {
-        setError("Failed to fetch applied jobs. Please try again later.");
+        setError("Failed to fetch saved jobs. Please try again later.");
         console.error(error);
       } finally {
         setIsLoading(false);
       }
     };
-    getAppliedJobs();
+
+    getSavedJobs();
   }, []);
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
-
-  const getStatusConfig = (
-    status: string
-  ): { color: string; icon: JSX.Element } => {
-    const configs = {
-      pending: {
-        color: "bg-yellow-100 text-yellow-800 border-yellow-200",
-        icon: <Clock className="w-4 h-4" />,
-      },
-      accepted: {
-        color: "bg-green-100 text-green-800 border-green-200",
-        icon: <CheckCircle className="w-4 h-4" />,
-      },
-      rejected: {
-        color: "bg-red-100 text-red-800 border-red-200",
-        icon: <XCircle className="w-4 h-4" />,
-      },
-    };
-    return (
-      configs[status.toLowerCase()] || {
-        color: "bg-gray-100 text-gray-800 border-gray-200",
-        icon: <Clock className="w-4 h-4" />,
-      }
-    );
-  };
 
   const toggleJobExpansion = (jobId: string) => {
     setExpandedJob(expandedJob === jobId ? null : jobId);
@@ -111,7 +71,7 @@ const AppliedJobs = () => {
 
   if (isLoading) {
     return (
-      <div className="p-6 max-w-6xl mx-auto">
+      <div className="p-4 sm:p-6 max-w-6xl mx-auto">
         <div className="animate-pulse space-y-4">
           {[1, 2, 3].map((i) => (
             <div key={i} className="bg-gray-100 h-40 rounded-lg"></div>
@@ -123,7 +83,7 @@ const AppliedJobs = () => {
 
   if (error) {
     return (
-      <div className="p-6 max-w-6xl mx-auto">
+      <div className="p-4 sm:p-6 max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -138,26 +98,22 @@ const AppliedJobs = () => {
   return (
     <div className="p-4 sm:p-6 max-w-6xl mx-auto h-full overflow-y-auto">
       <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-6 sm:mb-8">
-        <Briefcase className="w-6 h-6 sm:w-8 sm:h-8 text-blue-600" />
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
-          Applied Jobs
-        </h1>
+        <Bookmark className="w-6 h-6 sm:w-8 sm:h-8 text-blue-600" />
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Saved Jobs</h1>
       </div>
 
       <AnimatePresence>
-        {appliedJobs.length === 0 ? (
+        {savedJobs.length === 0 ? (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             className="text-center p-6 sm:p-12 bg-gray-50 rounded-lg border border-gray-200"
           >
-            <Briefcase className="w-10 h-10 sm:w-12 sm:h-12 text-gray-400 mx-auto mb-3 sm:mb-4" />
-            <p className="text-gray-600 text-base sm:text-lg">
-              No jobs applied yet
-            </p>
+            <Bookmark className="w-10 h-10 sm:w-12 sm:h-12 text-gray-400 mx-auto mb-3 sm:mb-4" />
+            <p className="text-gray-600 text-base sm:text-lg">No saved jobs yet</p>
             <p className="text-gray-500 text-sm sm:text-base mt-1 sm:mt-2">
-              Start applying to see your applications here
+              Start saving jobs to view them here
             </p>
           </motion.div>
         ) : (
@@ -167,8 +123,7 @@ const AppliedJobs = () => {
             animate="show"
             className="space-y-4"
           >
-            {appliedJobs.map((job) => {
-              const { color, icon } = getStatusConfig(job.status);
+            {savedJobs.map((job) => {
               const isExpanded = expandedJob === job._id;
 
               return (
@@ -181,24 +136,11 @@ const AppliedJobs = () => {
                     <div className="w-full sm:flex-1">
                       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 mb-3">
                         <h2 className="text-lg sm:text-xl font-semibold text-gray-900 break-all">
-                          Job ID: {job.job}
+                          {job.jobTitle}
                         </h2>
-                        <span
-                          className={`inline-flex items-center px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs sm:text-sm font-medium border ${color}`}
-                        >
-                          {icon}
-                          <span className="ml-1.5">{job.status}</span>
-                        </span>
-                      </div>
-
-                      <div className="flex flex-col sm:flex-row flex-wrap items-start sm:items-center gap-2 sm:gap-4 text-xs sm:text-sm text-gray-600">
-                        <span className="inline-flex items-center gap-1.5">
-                          <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                          {formatDate(job.submittedAt)}
-                        </span>
-                        <span className="inline-flex items-center gap-1.5">
-                          <DollarSign className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                          Bid Amount: ${job.bidAmount}
+                        <span className="inline-flex items-center px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs sm:text-sm font-medium border bg-blue-100 text-blue-800 border-blue-200">
+                          <Briefcase className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                          <span className="ml-1.5">Job ID: {job.jobId}</span>
                         </span>
                       </div>
                     </div>
@@ -228,18 +170,13 @@ const AppliedJobs = () => {
                       >
                         <div className="mt-4 sm:mt-6 pt-4 border-t border-gray-100">
                           <h3 className="text-xs sm:text-sm font-semibold text-gray-700 mb-2">
-                            Cover Letter
+                            Job Description
                           </h3>
                           <p className="text-xs sm:text-sm text-gray-600 whitespace-pre-line">
-                            {job.coverLetter}
+                            {job.jobDescription}
                           </p>
-
-                          <div
-                            className="mt-4 flex justify-end"
-                            onClick={() => {
-                              navigate(`/job/${job.job}`);
-                            }}
-                          >
+                          
+                          <div className="mt-4 flex justify-end" onClick={() => {navigate(`/job/${job.jobId}`)}}>
                             <motion.button
                               whileHover={{ scale: 1.02 }}
                               whileTap={{ scale: 0.98 }}
@@ -262,4 +199,4 @@ const AppliedJobs = () => {
   );
 };
 
-export default AppliedJobs;
+export default SavedJobs;

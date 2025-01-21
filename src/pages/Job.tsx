@@ -8,6 +8,7 @@ import {
   FaDollarSign,
   FaCrosshairs,
   FaSpinner,
+  FaSave,
 } from "react-icons/fa";
 import ApplyModal from "../components/ApplyModal";
 
@@ -60,6 +61,15 @@ const Job = () => {
     }
   };
 
+  const saveJob = async (jobId: string) => {
+    try {
+      const response = await axiosInstance.post(`/job/saveJob/${jobId}`);
+      toast.success(response.data.message);
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -85,7 +95,7 @@ const Job = () => {
     <div className="h-full overflow-y-scroll">
       <ToastContainer />
       <div className="max-w-4xl mx-auto space-y-6">
-        <div className="bg-white rounded-lg shadow-lg p-6">
+        <div className="bg-white rounded-lg shadow-lg p-6 flex justify-between">
           <div className="space-y-4">
             <div className="flex flex-col space-y-3">
               <h1 className="text-xl md:text-2xl font-bold text-gray-900 leading-tight">
@@ -111,6 +121,11 @@ const Job = () => {
               </span>
             </div>
           </div>
+          <div onClick={() => saveJob(job._id)}>
+            <button className=" p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+              <FaSave className="w-6 h-6 " />
+            </button>
+          </div>{" "}
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

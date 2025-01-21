@@ -10,6 +10,7 @@ import SidebarLayout from "./SidebarLayout";
 import Job from "./pages/Job";
 import AppliedJobs from "./pages/AppliedJobs";
 import Profile from "./pages/Profile";
+import SavedJobs from "./pages/SavedJobs";
 
 const App = () => {
   return (
@@ -26,6 +27,7 @@ const App = () => {
             <Route path="/job/:jobId" element={<Job />} />
             <Route path="/appliedjobs" element={<AppliedJobs />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/savedJobs" element={<SavedJobs />} />
           </Route>
         </Route>
       </Routes>

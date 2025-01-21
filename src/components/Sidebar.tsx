@@ -24,7 +24,7 @@ const Sidebar = () => {
   const menuItems = [
     { title: "Applied Jobs", icon: <FiBriefcase size={20} />, to: "/appliedjobs" },
     { title: "Finished Jobs", icon: <MdWorkHistory size={20} />, to: "#" },
-    { title: "Saved Jobs", icon: <FiBook size={20} />, to: "#"},
+    { title: "Saved Jobs", icon: <FiBook size={20} />, to: "/savedJobs"},
     { title: "Current Job", icon: <FiStar size={20} />,to: "#" },
   ];
 
