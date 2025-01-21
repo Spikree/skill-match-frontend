@@ -9,6 +9,7 @@ import ProtectedRoutes from "../utils/protectedRoutes";
 import SidebarLayout from "./SidebarLayout";
 import Job from "./pages/Job";
 import AppliedJobs from "./pages/AppliedJobs";
+import Profile from "./pages/Profile";
 
 const App = () => {
   return (
@@ -24,6 +25,7 @@ const App = () => {
             <Route path="/home" element={<Home />} />
             <Route path="/job/:jobId" element={<Job />} />
             <Route path="/appliedjobs" element={<AppliedJobs />} />
+            <Route path="/profile" element={<Profile />} />
           </Route>
         </Route>
       </Routes>

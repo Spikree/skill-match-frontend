@@ -28,6 +28,7 @@ const Login = () => {
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("username", response.data.user.profile.name);
       localStorage.setItem("useremail", response.data.user.email);
+      localStorage.setItem("role",response.data.user.role)
       navigate("/home");
     } catch (error) {
       toast.error(error?.response?.data.message);

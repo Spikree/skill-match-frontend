@@ -29,7 +29,7 @@ const Sidebar = () => {
   ];
 
   const profileOptions = [
-    { title: "Profile", icon: <FiUser size={16} />, action: () => {} },
+    { title: "Profile", icon: <FiUser size={16} />, action: () => {navigate("/profile")} },
     { title: "Settings", icon: <FiSettings size={16} />, action: () => {} },
     {
       title: "Logout",
@@ -55,7 +55,7 @@ const Sidebar = () => {
           {isOpen ? <FiChevronLeft size={16} /> : <FiChevronRight size={16} />}
         </button>
 
-        <div className="p-4 border-b border-gray-700">
+        <div onClick={() => navigate("/home")} className="p-4 border-b border-gray-700">
           <div className="flex items-center justify-center">
             <div className="h-10 w-10 bg-blue-500 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-xl">S</span>
