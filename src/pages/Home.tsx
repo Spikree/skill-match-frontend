@@ -3,6 +3,7 @@ import axiosInstance from "../../utils/axiosInstance";
 import { motion } from "framer-motion";
 import { BiBriefcase, BiCalendar, BiDollar, BiSearch } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
+import { FaSpinner } from "react-icons/fa";
 
 type Job = {
   title: string;
@@ -18,23 +19,36 @@ type Job = {
 
 const Home = () => {
   const [jobs, setJobs] = useState<Job[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     const getJobs = async () => {
+      setIsLoading(true)
       try {
         const response = await axiosInstance.get("/job/getJobs");
         setJobs(response.data.jobs);
       } catch (error) {
         console.log(error);
+      } finally {
+        setIsLoading(false)
       }
     };
 
     getJobs();
   }, []);
 
+    if (isLoading) {
+      return (
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+          <FaSpinner className="w-8 h-8 text-blue-600 animate-spin" />
+        </div>
+      );
+    }
+  
+
   return (
-    <div className="h-full overflow-hidden">
+    <div className="h-full overflow-hidden sm:pt-0 pt-16">
       <div className="flex mb-4 items-center w-56 sm:w-96 rounded-full shadow-lg bg-gray-50 overflow-hidden border border-gray-200">
         <input
           type="text"
@@ -63,24 +77,24 @@ const Home = () => {
               <div className="relative p-4 sm:p-6">
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
                   <div className="space-y-1">
-                    <h2 className="text-lg sm:text-xl font-semibold text-gray-900 group-hover:text-blue-600 transition-colors duration-300">
+                    <h2 className="text-lg cursor-pointer sm:text-xl font-semibold text-gray-900 group-hover:text-blue-600 transition-colors duration-300">
                       {job.title}
                     </h2>
                     <div className="flex flex-wrap items-center text-gray-500 gap-4">
                       <div className="flex items-center space-x-1">
                         <BiBriefcase className="w-4 h-4 flex-shrink-0" />
-                        <span className="text-sm">{job.employerName}</span>
+                        <span className="text-sm cursor-pointer">{job.employerName}</span>
                       </div>
                       <div className="flex items-center space-x-1">
                         <BiCalendar className="w-4 h-4 flex-shrink-0" />
-                        <span className="text-sm">
+                        <span className="text-sm cursor-pointer">
                           {new Date(job.createdAt).toLocaleDateString()}
                         </span>
                       </div>
                     </div>
                   </div>
 
-                  <div className="flex items-center">
+                  <div className="flex items-center cursor-pointer">
                     <BiDollar className="w-5 h-5 text-green-600" />
                     <span className="text-lg font-medium text-green-600">
                       {job.budget}
@@ -97,14 +111,19 @@ const Home = () => {
                     {job.skillsRequired.map((skill, idx) => (
                       <span
                         key={idx}
-                        className="border h-8 px-2 rounded-md bg-violet-200"
+                        className="border h-8 px-2 rounded-md bg-violet-200 cursor-pointer"
                       >
                         {skill}
                       </span>
                     ))}
                   </div>
 
-                  <button onClick={() => {navigate(`/job/${job._id}`)}} className="bg-green-200 text-black px-4 py-2 rounded-md hover:bg-green-300 transition-colors duration-200 w-full sm:w-auto">
+                  <button
+                    onClick={() => {
+                      navigate(`/job/${job._id}`);
+                    }}
+                    className="bg-green-200 text-black px-4 py-2 rounded-md hover:bg-green-300 transition-colors duration-200 w-full sm:w-auto"
+                  >
                     send proposal
                   </button>
                 </div>

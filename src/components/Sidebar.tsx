@@ -11,21 +11,29 @@ import {
   FiUser,
   FiSettings,
   FiLogOut,
+  FiHome,
 } from "react-icons/fi";
 
 const Sidebar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const [showProfileOptions, setShowProfileOptions] = useState(false);
   const navigate = useNavigate();
 
   const username = localStorage.getItem("username");
   const useremail = localStorage.getItem("useremail");
 
+  const dontShowProfileOptions = () => {
+    if(showProfileOptions) {
+      setShowProfileOptions(false);
+    }
+  }
+
   const menuItems = [
+    { title: "Home", icon: <FiHome size={20} />, to: "/home" },
     { title: "Applied Jobs", icon: <FiBriefcase size={20} />, to: "/appliedjobs" },
-    { title: "Finished Jobs", icon: <MdWorkHistory size={20} />, to: "#" },
+    { title: "Finished Jobs", icon: <MdWorkHistory size={20} />, to: "/finishedJobs" },
     { title: "Saved Jobs", icon: <FiBook size={20} />, to: "/savedJobs"},
-    { title: "Current Job", icon: <FiStar size={20} />,to: "#" },
+    { title: "Current Job", icon: <FiStar size={20} />,to: "/currentJob" },
   ];
 
   const profileOptions = [
@@ -42,7 +50,7 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className="flex">
+    <div className=" hidden sm:flex" onClick={dontShowProfileOptions}>
       <div
         className={`${
           isOpen ? "w-64" : "w-20"

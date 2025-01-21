@@ -142,7 +142,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="bg-gray-50 sm:bg-white rounded-md h-full overflow-y-scroll">
+    <div className="bg-gray-50 sm:bg-white rounded-md h-full overflow-y-scroll mt-16 sm:mt-0">
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">

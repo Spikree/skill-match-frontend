@@ -11,6 +11,8 @@ import Job from "./pages/Job";
 import AppliedJobs from "./pages/AppliedJobs";
 import Profile from "./pages/Profile";
 import SavedJobs from "./pages/SavedJobs";
+import CurrentJob from "./pages/CurrentJob";
+import FinishedJobs from "./pages/FinishedJobs";
 
 const App = () => {
   return (
@@ -28,6 +30,8 @@ const App = () => {
             <Route path="/appliedjobs" element={<AppliedJobs />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/savedJobs" element={<SavedJobs />} />
+            <Route path="/currentJob" element={<CurrentJob />} />
+            <Route path="/finishedJobs" element={<FinishedJobs />} />
           </Route>
         </Route>
       </Routes>

@@ -92,7 +92,7 @@ const Job = () => {
   };
 
   return (
-    <div className="h-full overflow-y-scroll">
+    <div className="h-full overflow-y-scroll pt-16 sm:pt-0">
       <ToastContainer />
       <div className="max-w-4xl mx-auto space-y-6">
         <div className="bg-white rounded-lg shadow-lg p-6 flex justify-between">
