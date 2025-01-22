@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import axiosInstance from "../../utils/axiosInstance";
+import { Briefcase } from "lucide-react";
 
 type FinishedJob = {
   createdAt: string;
@@ -81,11 +82,13 @@ const FinishedJobs = () => {
     return (
       <div className="p-6 pt-24 sm:pt-16">
         <div className="max-w-4xl mx-auto text-center">
+        
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="bg-white rounded-lg shadow-lg p-6"
           >
+            <Briefcase className="w-10 h-10 sm:w-12 sm:h-12 text-gray-400 mx-auto mb-3 sm:mb-4" />
             You haven't finished a job yet,{" "}
             <span
               onClick={() => navigate("/home")}

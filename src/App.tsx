@@ -13,25 +13,31 @@ import Profile from "./pages/Profile";
 import SavedJobs from "./pages/SavedJobs";
 import CurrentJob from "./pages/CurrentJob";
 import FinishedJobs from "./pages/FinishedJobs";
+import FreeLancerRoutes from "../utils/FreeLancerRoutes";
+import NotFound from "./errorPages/NotFound";
 
 const App = () => {
   return (
     <div className="">
       <ToastContainer />
       <Routes>
+        <Route path="*" element={<NotFound />} />
+
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/create-account" element={<CreateAccount />} />
 
         <Route element={<ProtectedRoutes />}>
-          <Route element={<SidebarLayout />}>
-            <Route path="/home" element={<Home />} />
-            <Route path="/job/:jobId" element={<Job />} />
-            <Route path="/appliedjobs" element={<AppliedJobs />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/savedJobs" element={<SavedJobs />} />
-            <Route path="/currentJob" element={<CurrentJob />} />
-            <Route path="/finishedJobs" element={<FinishedJobs />} />
+          <Route element={<FreeLancerRoutes />}>
+            <Route element={<SidebarLayout />}>
+              <Route path="/home" element={<Home />} />
+              <Route path="/job/:jobId" element={<Job />} />
+              <Route path="/appliedjobs" element={<AppliedJobs />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/savedJobs" element={<SavedJobs />} />
+              <Route path="/currentJob" element={<CurrentJob />} />
+              <Route path="/finishedJobs" element={<FinishedJobs />} />
+            </Route>
           </Route>
         </Route>
       </Routes>

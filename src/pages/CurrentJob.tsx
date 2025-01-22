@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import axiosInstance from "../../utils/axiosInstance";
+import { useNavigate } from "react-router-dom";
+import { Briefcase } from "lucide-react";
 
 type JobType = {
   _id: string;
@@ -18,6 +20,7 @@ const CurrentJobs = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [expandedJobs, setExpandedJobs] = useState<Record<string, boolean>>({});
+  const navigate = useNavigate();
 
   const truncateText = (text: string, wordLimit: number) => {
     const words = text.split(' ');
@@ -89,7 +92,8 @@ const CurrentJobs = () => {
         animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-2xl mx-auto p-6 mt-16 sm:mt-0 bg-white rounded-lg shadow-lg"
       >
-        <p className="text-center text-gray-500">You don't have any jobs yet</p>
+        <Briefcase className="w-10 h-10 sm:w-12 sm:h-12 text-gray-400 mx-auto mb-3 sm:mb-4" />
+        <p className="text-center text-gray-500">You don't have any jobs yet <span onClick={() => navigate("/jobs")} className="text-blue-500 cursor-pointer">View Jobs</span></p>
       </motion.div>
     );
   }
