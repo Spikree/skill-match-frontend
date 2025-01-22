@@ -11,6 +11,7 @@ import {
   FaSave,
 } from "react-icons/fa";
 import ApplyModal from "../components/ApplyModal";
+import { AxiosError } from "axios";
 
 type Job = {
   title: string;
@@ -57,7 +58,8 @@ const Job = () => {
       console.log(response);
       toast.success(response.data.message);
     } catch (error) {
-      toast.error(error.response.data.message);
+      const err = error as AxiosError<{message: string}>
+      toast.error(err?.response?.data.message);
     }
   };
 
@@ -66,7 +68,8 @@ const Job = () => {
       const response = await axiosInstance.post(`/job/saveJob/${jobId}`);
       toast.success(response.data.message);
     } catch (error) {
-      toast.error(error.response.data.message);
+      const err = error as AxiosError<{message: string}>
+      toast.error(err?.response?.data.message);
     }
   };
 
@@ -177,12 +180,20 @@ const Job = () => {
             </div>
           </div>
         </div>
-        <button
-          onClick={toggleModal}
-          className="px-4 py-2 bg-green-300 text-center pb-2 rounded-md"
-        >
-          Apply
-        </button>
+        {job.status === "open" ? (
+          <button
+            onClick={toggleModal}
+            className="px-4 py-2 bg-green-300 text-center pb-2 rounded-md"
+          >
+            Apply
+          </button>
+        ) : (
+          <button
+            className="px-4 py-2 bg-red-300 text-center pb-2 rounded-md"
+          >
+            Closed
+          </button>
+        )}
       </div>
       {showModal && (
         <ApplyModal applyToJob={applyToJob} toggleModal={toggleModal} />

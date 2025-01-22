@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance.tsx";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { AxiosError } from "axios";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -31,7 +32,8 @@ const Login = () => {
       localStorage.setItem("role",response.data.user.role)
       navigate("/home");
     } catch (error) {
-      toast.error(error?.response?.data.message);
+      const err = error as AxiosError<{message: string}>
+      toast.error(err?.response?.data.message);
     }
   };
 
