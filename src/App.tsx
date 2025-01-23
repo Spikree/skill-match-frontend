@@ -43,7 +43,9 @@ const App = () => {
           </Route>
 
           <Route element={<EmployerRoutes />}>
-            <Route path="dashboard" element={<Dashboard/>} />
+            <Route element={<SidebarLayout />}>
+              <Route path="dashboard" element={<Dashboard />} />
+            </Route>
           </Route>
         </Route>
       </Routes>

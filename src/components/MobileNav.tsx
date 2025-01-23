@@ -12,6 +12,7 @@ import {
   FiHome,
   FiMenu,
   FiX,
+  FiPlusCircle,
 } from "react-icons/fi";
 
 const MobileNav = () => {
@@ -25,16 +26,27 @@ const MobileNav = () => {
     }
   }
 
+  const userRole = localStorage.getItem("role")
   const username = localStorage.getItem("username");
   const useremail = localStorage.getItem("useremail");
 
-  const menuItems = [
+  const freelancerMenuItems = [
     { title: "Home", icon: <FiHome size={20} />, to: "/home" },
     { title: "Applied Jobs", icon: <FiBriefcase size={20} />, to: "/appliedjobs" },
     { title: "Finished Jobs", icon: <MdWorkHistory size={20} />, to: "/finishedJobs" },
     { title: "Saved Jobs", icon: <FiBook size={20} />, to: "/savedJobs" },
     { title: "Current Job", icon: <FiStar size={20} />, to: "/currentJob" },
   ];
+
+  const employerMenuItems = [
+      { title: "dashboard", icon: <FiHome size={20} />, to: "/dashboard" },
+      {
+        title: "Post Job",
+        icon: <FiPlusCircle size={20} />,
+        to: "/postJob",
+      },
+    ];
+  
 
   const profileOptions = [
     { title: "Profile", icon: <FiUser size={16} />, action: () => {
@@ -49,6 +61,8 @@ const MobileNav = () => {
       navigate("/login");
     }},
   ];
+
+  const menuItems = userRole === "employer" ? employerMenuItems : freelancerMenuItems;
 
   return (
     <div className="sm:hidden mb-16" onClick={dontShowProfileOptions}>

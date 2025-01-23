@@ -12,6 +12,8 @@ import {
   FiSettings,
   FiLogOut,
   FiHome,
+  FiPlusCircle,
+  // FiClipboard,
 } from "react-icons/fi";
 
 const Sidebar = () => {
@@ -21,23 +23,47 @@ const Sidebar = () => {
 
   const username = localStorage.getItem("username");
   const useremail = localStorage.getItem("useremail");
+  const userRole = localStorage.getItem("role");
 
   const dontShowProfileOptions = () => {
-    if(showProfileOptions) {
+    if (showProfileOptions) {
       setShowProfileOptions(false);
     }
-  }
+  };
 
-  const menuItems = [
+  const freelancerMenuItems = [
     { title: "Home", icon: <FiHome size={20} />, to: "/home" },
-    { title: "Applied Jobs", icon: <FiBriefcase size={20} />, to: "/appliedjobs" },
-    { title: "Finished Jobs", icon: <MdWorkHistory size={20} />, to: "/finishedJobs" },
-    { title: "Saved Jobs", icon: <FiBook size={20} />, to: "/savedJobs"},
-    { title: "Current Job", icon: <FiStar size={20} />,to: "/currentJob" },
+    {
+      title: "Applied Jobs",
+      icon: <FiBriefcase size={20} />,
+      to: "/appliedjobs",
+    },
+    {
+      title: "Finished Jobs",
+      icon: <MdWorkHistory size={20} />,
+      to: "/finishedJobs",
+    },
+    { title: "Saved Jobs", icon: <FiBook size={20} />, to: "/savedJobs" },
+    { title: "Current Job", icon: <FiStar size={20} />, to: "/currentJob" },
+  ];
+
+  const employerMenuItems = [
+    { title: "dashboard", icon: <FiHome size={20} />, to: "/dashboard" },
+    {
+      title: "Post Job",
+      icon: <FiPlusCircle size={20} />,
+      to: "/postJob",
+    },
   ];
 
   const profileOptions = [
-    { title: "Profile", icon: <FiUser size={16} />, action: () => {navigate("/profile")} },
+    {
+      title: "Profile",
+      icon: <FiUser size={16} />,
+      action: () => {
+        navigate("/profile");
+      },
+    },
     { title: "Settings", icon: <FiSettings size={16} />, action: () => {} },
     {
       title: "Logout",
@@ -45,12 +71,15 @@ const Sidebar = () => {
       action: () => {
         localStorage.removeItem("token");
         localStorage.removeItem("username");
-        localStorage.removeItem("useremail")
-        localStorage.removeItem("role")
+        localStorage.removeItem("useremail");
+        localStorage.removeItem("role");
         navigate("/login");
       },
     },
   ];
+
+  const menuItems =
+    userRole === "employer" ? employerMenuItems : freelancerMenuItems;
 
   return (
     <div className=" hidden sm:flex" onClick={dontShowProfileOptions}>
@@ -66,7 +95,10 @@ const Sidebar = () => {
           {isOpen ? <FiChevronLeft size={16} /> : <FiChevronRight size={16} />}
         </button>
 
-        <div onClick={() => navigate("/home")} className="p-4 border-b border-gray-700">
+        <div
+          onClick={() => navigate("/home")}
+          className="p-4 border-b border-gray-700"
+        >
           <div className="flex items-center justify-center">
             <div className="h-10 w-10 bg-blue-500 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-xl">S</span>
