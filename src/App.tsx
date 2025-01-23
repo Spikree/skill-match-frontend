@@ -17,10 +17,11 @@ import FreeLancerRoutes from "../utils/FreeLancerRoutes";
 import NotFound from "./errorPages/NotFound";
 import EmployerRoutes from "../utils/EmployerRoutes";
 import Dashboard from "./pages/employer/Dashboard";
+import PostJob from "./pages/employer/PostJob";
 
 const App = () => {
   return (
-    <div className="">
+    <div>
       <ToastContainer />
       <Routes>
         <Route path="*" element={<NotFound />} />
@@ -45,6 +46,7 @@ const App = () => {
           <Route element={<EmployerRoutes />}>
             <Route element={<SidebarLayout />}>
               <Route path="dashboard" element={<Dashboard />} />
+              <Route path="postJob" element={<PostJob />} />
             </Route>
           </Route>
         </Route>
