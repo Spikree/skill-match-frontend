@@ -15,6 +15,8 @@ import CurrentJob from "./pages/CurrentJob";
 import FinishedJobs from "./pages/FinishedJobs";
 import FreeLancerRoutes from "../utils/FreeLancerRoutes";
 import NotFound from "./errorPages/NotFound";
+import EmployerRoutes from "../utils/EmployerRoutes";
+import Dashboard from "./pages/employer/Dashboard";
 
 const App = () => {
   return (
@@ -38,6 +40,10 @@ const App = () => {
               <Route path="/currentJob" element={<CurrentJob />} />
               <Route path="/finishedJobs" element={<FinishedJobs />} />
             </Route>
+          </Route>
+
+          <Route element={<EmployerRoutes />}>
+            <Route path="dashboard" element={<Dashboard/>} />
           </Route>
         </Route>
       </Routes>

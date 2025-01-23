@@ -44,6 +44,9 @@ const Sidebar = () => {
       icon: <FiLogOut size={16} />,
       action: () => {
         localStorage.removeItem("token");
+        localStorage.removeItem("username");
+        localStorage.removeItem("useremail")
+        localStorage.removeItem("role")
         navigate("/login");
       },
     },
