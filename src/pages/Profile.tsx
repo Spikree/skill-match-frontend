@@ -28,9 +28,9 @@ type UserDetails = {
 const Profile = () => {
   const [userDetails, setUserDetails] = useState<UserDetails>();
   const [isEditing, setIsEditing] = useState(false);
-  const [editedProfile, setEditedProfile] = useState<UserDetails["profile"] | null>(
-    null
-  );
+  const [editedProfile, setEditedProfile] = useState<
+    UserDetails["profile"] | null
+  >(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
@@ -77,12 +77,16 @@ const Profile = () => {
       };
 
       await axiosInstance.put("/profile/edit", editProfileData);
-      
-      setUserDetails(prev => prev ? {
-        ...prev,
-        profile: editedProfile
-      } : undefined);
-      
+
+      setUserDetails((prev) =>
+        prev
+          ? {
+              ...prev,
+              profile: editedProfile,
+            }
+          : undefined
+      );
+
       setIsEditing(false);
       setEditedProfile(null);
       setError(null);
@@ -107,12 +111,63 @@ const Profile = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 p-4 sm:p-6">
-        <div className="animate-pulse space-y-4 max-w-4xl mx-auto">
-          <div className="h-48 bg-gray-100 rounded-lg"></div>
-          <div className="space-y-3">
-            <div className="h-4 bg-gray-100 rounded w-3/4"></div>
-            <div className="h-4 bg-gray-100 rounded w-1/2"></div>
+      <div className="bg-gray-50 sm:bg-white rounded-md h-full overflow-y-scroll mt-16 sm:mt-0">
+        <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-6 animate-pulse">
+              <div className="flex items-center gap-6">
+                <div className="w-24 h-24 bg-white/10 rounded-full"></div>
+                <div className="space-y-3">
+                  <div className="h-8 w-48 bg-white/10 rounded"></div>
+                  <div className="h-6 w-32 bg-white/10 rounded"></div>
+                </div>
+              </div>
+              <div className="h-12 w-36 bg-white/10 rounded-lg"></div>
+            </div>
+          </div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
+            <div className="lg:col-span-1">
+              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 space-y-4">
+                <div className="h-6 w-1/2 bg-gray-100 rounded mb-4"></div>
+                <div className="space-y-4">
+                  {[1, 2, 3, 4].map((item) => (
+                    <div
+                      key={item}
+                      className="h-5 w-full bg-gray-100 rounded"
+                    ></div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="lg:col-span-2 space-y-6 sm:space-y-8">
+              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <div className="h-6 w-1/2 bg-gray-100 rounded mb-4"></div>
+                <div className="space-y-3">
+                  {[1, 2, 3].map((item) => (
+                    <div
+                      key={item}
+                      className="h-4 w-full bg-gray-100 rounded"
+                    ></div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <div className="h-6 w-1/2 bg-gray-100 rounded mb-4"></div>
+                <div className="flex flex-wrap gap-2">
+                  {[1, 2, 3, 4].map((item) => (
+                    <div
+                      key={item}
+                      className="h-8 w-20 bg-gray-100 rounded-full"
+                    ></div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -153,11 +208,11 @@ const Profile = () => {
               </div>
               <div>
                 <h1 className="text-2xl sm:text-3xl font-bold">
-                  {isEditing
-                    ? editedProfile?.name
-                    : userDetails.profile.name}
+                  {isEditing ? editedProfile?.name : userDetails.profile.name}
                 </h1>
-                <p className="text-lg sm:text-xl text-blue-100 mt-1">{userDetails.role}</p>
+                <p className="text-lg sm:text-xl text-blue-100 mt-1">
+                  {userDetails.role}
+                </p>
               </div>
             </div>
             {!isEditing ? (
@@ -180,7 +235,7 @@ const Profile = () => {
                   className="w-full sm:w-auto px-6 py-3 bg-white rounded-lg flex items-center justify-center gap-2 text-blue-600 hover:bg-white/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Save className="w-5 h-5" />
-                  {isSaving ? 'Saving...' : 'Save Changes'}
+                  {isSaving ? "Saving..." : "Save Changes"}
                 </motion.button>
                 <motion.button
                   whileHover={{ scale: 1.05 }}
@@ -198,13 +253,13 @@ const Profile = () => {
         </div>
       </div>
 
-      {/* Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
-          {/* Left Column - Basic Info */}
           <div className="lg:col-span-1">
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 space-y-4">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Basic Information</h2>
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">
+                Basic Information
+              </h2>
               <div className="space-y-4">
                 <div className="flex items-center gap-3 text-gray-600">
                   <Mail className="w-5 h-5 flex-shrink-0" />
@@ -225,7 +280,9 @@ const Profile = () => {
                       <input
                         type="url"
                         value={editedProfile?.portfolio}
-                        onChange={(e) => handleInputChange("portfolio", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("portfolio", e.target.value)
+                        }
                         className="flex-1 p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                       />
                     ) : (
@@ -244,11 +301,11 @@ const Profile = () => {
             </div>
           </div>
 
-          {/* Right Column - Bio and Skills */}
           <div className="lg:col-span-2 space-y-6 sm:space-y-8">
-            {/* Bio */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">About</h2>
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">
+                About
+              </h2>
               {isEditing ? (
                 <textarea
                   value={editedProfile?.bio}
@@ -263,9 +320,10 @@ const Profile = () => {
               )}
             </div>
 
-            {/* Skills */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Skills</h2>
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">
+                Skills
+              </h2>
               {isEditing ? (
                 <input
                   type="text"

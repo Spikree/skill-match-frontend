@@ -7,7 +7,6 @@ import {
   FaCalendar,
   FaDollarSign,
   FaCrosshairs,
-  FaSpinner,
   FaSave,
 } from "react-icons/fa";
 import ApplyModal from "../components/ApplyModal";
@@ -75,8 +74,48 @@ const Job = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <FaSpinner className="w-8 h-8 text-blue-600 animate-spin" />
+      <div className="h-full overflow-y-scroll pt-16 sm:pt-0">
+        <div className="max-w-4xl mx-auto space-y-6">
+          <div className="bg-white rounded-lg shadow-lg p-6 flex justify-between animate-pulse">
+            <div className="space-y-4 w-full">
+              <div className="h-8 bg-gray-200 rounded w-3/4"></div>
+              <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+              <div className="flex gap-2">
+                <div className="h-6 bg-gray-200 rounded-full w-20"></div>
+                <div className="h-6 bg-gray-200 rounded-full w-20"></div>
+              </div>
+            </div>
+            <div className="h-10 w-10 bg-gray-200 rounded-lg"></div>
+          </div>
+  
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+            <div className="lg:col-span-2 bg-white rounded-lg shadow-lg">
+              <div className="p-6 space-y-4">
+                <div className="h-6 bg-gray-200 rounded w-1/2"></div>
+                <div className="h-4 bg-gray-200 rounded w-full"></div>
+                <div className="h-4 bg-gray-200 rounded w-full"></div>
+                <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              <div className="bg-white rounded-lg shadow-lg p-6">
+                <div className="h-6 bg-gray-200 rounded w-1/2 mb-4"></div>
+                <div className="flex flex-wrap gap-2">
+                  <div className="h-6 bg-gray-200 rounded-full w-20"></div>
+                  <div className="h-6 bg-gray-200 rounded-full w-20"></div>
+                  <div className="h-6 bg-gray-200 rounded-full w-20"></div>
+                </div>
+              </div>
+  
+              <div className="bg-white rounded-lg shadow-lg p-6">
+                <div className="h-6 bg-gray-200 rounded w-1/2 mb-4"></div>
+                <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

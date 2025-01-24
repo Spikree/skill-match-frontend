@@ -3,7 +3,6 @@ import axiosInstance from "../../utils/axiosInstance";
 import { motion } from "framer-motion";
 import { BiBriefcase, BiCalendar, BiDollar, BiSearch } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
-import { FaSpinner } from "react-icons/fa";
 
 type Job = {
   title: string;
@@ -38,14 +37,35 @@ const Home = () => {
     getJobs();
   }, []);
 
-    if (isLoading) {
-      return (
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-          <FaSpinner className="w-8 h-8 text-blue-600 animate-spin" />
+  if (isLoading) {
+    return (
+      <div className="h-full overflow-hidden sm:pt-0 pt-16 px-4 py-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {[1, 2, 3].map((i) => (
+            <motion.div
+              key={i}
+              className="group relative bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 overflow-hidden h-fit"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3, delay: i * 0.1 }}
+            >
+              <div className="relative p-4 sm:p-6">
+                <div className="animate-pulse space-y-4">
+                  <div className="h-6 bg-gray-200 rounded w-3/4" />
+                  <div className="h-4 bg-gray-200 rounded w-1/2 mt-2" />
+                  <div className="h-20 bg-gray-200 rounded mt-4" />
+                  <div className="flex gap-2 mt-4">
+                    <div className="h-8 bg-gray-200 rounded w-20" />
+                    <div className="h-8 bg-gray-200 rounded w-20" />
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          ))}
         </div>
-      );
-    }
-  
+      </div>
+    );
+  }
 
   return (
     <div className="h-full overflow-hidden sm:pt-0 pt-16">
