@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { FiClock, FiDollarSign } from "react-icons/fi";
 import axiosInstance from "../../../utils/axiosInstance";
+import { useNavigate } from "react-router-dom";
 
 type Job = {
   budget: string;
@@ -17,6 +18,7 @@ type Job = {
 
 const Dashboard = () => {
   const [allJobs, setAllJobs] = useState<Job[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getAllJobs = async () => {
@@ -130,6 +132,9 @@ const Dashboard = () => {
                     </div>
 
                     <motion.button
+                    onClick={() => {
+                      navigate(`/JobDetails/${job._id}`)
+                    }}
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       className="w-full bg-gradient-to-r from-blue-600 to-blue-500 text-white px-6 py-2.5 rounded-xl text-sm font-medium hover:from-blue-700 hover:to-blue-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm hover:shadow"

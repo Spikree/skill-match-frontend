@@ -18,6 +18,7 @@ import NotFound from "./errorPages/NotFound";
 import EmployerRoutes from "../utils/EmployerRoutes";
 import Dashboard from "./pages/employer/Dashboard";
 import PostJob from "./pages/employer/PostJob";
+import JobDetails from "./pages/employer/JobDetails";
 
 const App = () => {
   return (
@@ -47,6 +48,7 @@ const App = () => {
             <Route element={<SidebarLayout />}>
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="postJob" element={<PostJob />} />
+              <Route path="JobDetails/:jobId" element={<JobDetails />} />
             </Route>
           </Route>
         </Route>
