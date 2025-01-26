@@ -19,6 +19,7 @@ import EmployerRoutes from "../utils/EmployerRoutes";
 import Dashboard from "./pages/employer/Dashboard";
 import PostJob from "./pages/employer/PostJob";
 import JobDetails from "./pages/employer/JobDetails";
+import OnGoingJobs from "./pages/employer/OnGoingJobs";
 
 const App = () => {
   return (
@@ -49,6 +50,7 @@ const App = () => {
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="postJob" element={<PostJob />} />
               <Route path="JobDetails/:jobId" element={<JobDetails />} />
+              <Route path="getOnGoingJobs" element={<OnGoingJobs />} />
             </Route>
           </Route>
         </Route>

@@ -13,6 +13,8 @@ import {
   FiLogOut,
   FiHome,
   FiPlusCircle,
+  FiCloudSnow,
+  FiSave,
   // FiClipboard,
 } from "react-icons/fi";
 
@@ -53,6 +55,11 @@ const Sidebar = () => {
       title: "Post Job",
       icon: <FiPlusCircle size={20} />,
       to: "/postJob",
+    },
+    {
+      title: "Ongoing jobs",
+      icon: <FiSave size={20} />,
+      to: "/getOnGoingJobs",
     },
   ];
 
