@@ -12,7 +12,6 @@ import {
   ChevronDown,
   Check,
 } from "lucide-react";
-import { span } from "framer-motion/client";
 
 type Job = {
   budget: string;
@@ -78,6 +77,14 @@ const OnGoingJobDetails = () => {
     }
   };
 
+  const markJobAsFinished = async () => {
+    try {
+      const response = await axiosInstance.post(`/job/markFinished/${jobId}`)
+      console.log(response)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const status = [
     // { name: "Open", value: "open", color: "bg-blue-100 text-blue-800" },
@@ -280,7 +287,9 @@ const OnGoingJobDetails = () => {
               </div>
               <div>
                 {job.status === "completed" && (
-                  <span className="p-2 rounded-md text-green-950 font-semibold  bg-green-300">
+                  <span onClick={() => {
+                    markJobAsFinished()
+                  }} className="p-2 rounded-md text-green-950 font-semibold  bg-green-300">
                     mark finished
                   </span>
                 )}

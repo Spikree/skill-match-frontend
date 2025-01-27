@@ -7,6 +7,7 @@ import {
   DollarSign,
   Sparkles,
 } from "lucide-react";
+import axiosInstance from "../../../utils/axiosInstance";
 
 type FormData = {
   title: string;
@@ -25,15 +26,13 @@ function App() {
 
   const postAJob = async (formData: FormData) => {
     try {
-      setIsSubmitting(true);
-      // Simulated API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log(formData);
-      // Reset form after successful submission
-      setTitle("");
-      setDescription("");
-      setBudget("");
-      setSkillsRequired([]);
+     const response = await axiosInstance.post('/job/createJob', formData)
+     console.log(response)
+     setTitle("")
+     setDescription("")
+     setBudget("")
+     setSkillsRequired([])
+     setIsSubmitting(false)
     } catch (error) {
       console.error(error);
     } finally {
