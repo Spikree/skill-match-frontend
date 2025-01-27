@@ -13,6 +13,7 @@ import {
   FiMenu,
   FiX,
   FiPlusCircle,
+  FiSave,
 } from "react-icons/fi";
 
 const MobileNav = () => {
@@ -45,6 +46,11 @@ const MobileNav = () => {
         icon: <FiPlusCircle size={20} />,
         to: "/postJob",
       },
+      {
+            title: "Jobs in progress",
+            icon: <FiSave size={20} />,
+            to: "/getOnGoingJobs",
+          },
     ];
   
 

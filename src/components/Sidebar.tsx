@@ -57,7 +57,7 @@ const Sidebar = () => {
       to: "/postJob",
     },
     {
-      title: "Ongoing jobs",
+      title: "Jobs in progress",
       icon: <FiSave size={20} />,
       to: "/getOnGoingJobs",
     },

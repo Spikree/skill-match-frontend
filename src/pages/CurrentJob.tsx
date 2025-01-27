@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import axiosInstance from "../../utils/axiosInstance";
 import { useNavigate } from "react-router-dom";
 import { Briefcase } from "lucide-react";
+import { div } from "framer-motion/client";
 
 type JobType = {
   _id: string;
@@ -99,11 +100,12 @@ const CurrentJobs = () => {
   }
 
   return (
+    <div className="h-full overflow-y-auto mt-20 sm:mt-0">
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="w-full max-w-7xl mx-auto mt-16 p-6"
+      className="w-full max-w-7xl mx-auto mt-16 sm:mt-0 p-6 "
     >
       <motion.div
         initial={{ opacity: 0 }}
@@ -187,6 +189,7 @@ const CurrentJobs = () => {
         ))}
       </motion.div>
     </motion.div>
+    </div>
   );
 };
 

@@ -20,6 +20,7 @@ import Dashboard from "./pages/employer/Dashboard";
 import PostJob from "./pages/employer/PostJob";
 import JobDetails from "./pages/employer/JobDetails";
 import OnGoingJobs from "./pages/employer/OnGoingJobs";
+import OnGoingJobDetails from "./pages/employer/OnGoingJobDetails";
 
 const App = () => {
   return (
@@ -51,6 +52,7 @@ const App = () => {
               <Route path="postJob" element={<PostJob />} />
               <Route path="JobDetails/:jobId" element={<JobDetails />} />
               <Route path="getOnGoingJobs" element={<OnGoingJobs />} />
+              <Route path="getOnGoingJobDetails/:jobId" element={<OnGoingJobDetails />} />
             </Route>
           </Route>
         </Route>
