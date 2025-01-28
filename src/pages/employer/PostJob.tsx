@@ -8,6 +8,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import axiosInstance from "../../../utils/axiosInstance";
+import { ToastContainer, toast } from "react-toastify";
 
 type FormData = {
   title: string;
@@ -28,6 +29,7 @@ function App() {
     try {
      const response = await axiosInstance.post('/job/createJob', formData)
      console.log(response)
+     toast.success(response.data.message)
      setTitle("")
      setDescription("")
      setBudget("")
@@ -35,6 +37,7 @@ function App() {
      setIsSubmitting(false)
     } catch (error) {
       console.error(error);
+      toast.error(error.response.data.message)
     } finally {
       setIsSubmitting(false);
     }
@@ -73,6 +76,7 @@ function App() {
 
   return (
     <div className="h-full bg-gradient-to-br py-12 px-4 sm:px-6 lg:px-8 overflow-y-auto pt-14 sm:pt-0">
+      <ToastContainer/>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
