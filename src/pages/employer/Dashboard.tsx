@@ -23,7 +23,7 @@ const Dashboard = () => {
   useEffect(() => {
     const getAllJobs = async () => {
       try {
-        const response = await axiosInstance.get("/job/getJobs");
+        const response = await axiosInstance.get("/job/getCreatedJobs");
         setAllJobs(response.data.jobs);
       } catch (error) {
         console.log(error);
@@ -63,7 +63,7 @@ const Dashboard = () => {
         </motion.div>
 
         <div className="space-y-4">
-          {allJobs.map((job, index) => (
+          {allJobs?.map((job, index) => (
             <motion.div
               key={job._id}
               variants={cardVariants}

@@ -12,6 +12,7 @@ import {
   ChevronDown,
   Check,
 } from "lucide-react";
+import { ToastContainer, toast } from "react-toastify";
 
 type Job = {
   budget: string;
@@ -80,7 +81,7 @@ const OnGoingJobDetails = () => {
   const markJobAsFinished = async () => {
     try {
       const response = await axiosInstance.post(`/job/markFinished/${jobId}`)
-      console.log(response)
+      toast.success(response.data.message)
     } catch (error) {
       console.log(error)
     }
@@ -138,6 +139,7 @@ const OnGoingJobDetails = () => {
 
   return (
     <div className="h-full overflow-y-auto p-4 sm:p-6 pt-20 sm:pt-10">
+      <ToastContainer/>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

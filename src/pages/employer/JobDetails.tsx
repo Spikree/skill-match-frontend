@@ -17,6 +17,7 @@ import {
   X,
   User2,
 } from "lucide-react";
+import { ToastContainer, toast } from "react-toastify";
 
 type Job = {
   budget: string;
@@ -74,7 +75,8 @@ const JobDetails = () => {
   const handleAcceptProposal = async (proposalId: string) => {
     try {
       const response = await axiosInstance.post(`/job/acceptProposal/${jobId}/${proposalId}`)
-      console.log(response)
+      toast.success(response.data.message)
+      setIsModalOpen(false)
     } catch (error) {
       console.log(error)
     }
@@ -110,6 +112,7 @@ const JobDetails = () => {
 
   return (
     <div className="h-full overflow-y-auto bg-gradient-to-br p-4 sm:p-6 pt-20 sm:pt-0">
+    <ToastContainer/>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
