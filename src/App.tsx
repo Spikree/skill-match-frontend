@@ -34,12 +34,12 @@ const App = () => {
         <Route path="/create-account" element={<CreateAccount />} />
 
         <Route element={<ProtectedRoutes />}>
-          <Route element={<FreeLancerRoutes />}>
-            <Route element={<SidebarLayout />}>
+          <Route element={<SidebarLayout />}>
+            <Route path="/profile" element={<Profile />} />
+            <Route element={<FreeLancerRoutes />}>
               <Route path="/home" element={<Home />} />
               <Route path="/job/:jobId" element={<Job />} />
               <Route path="/appliedjobs" element={<AppliedJobs />} />
-              <Route path="/profile" element={<Profile />} />
               <Route path="/savedJobs" element={<SavedJobs />} />
               <Route path="/currentJob" element={<CurrentJob />} />
               <Route path="/finishedJobs" element={<FinishedJobs />} />
@@ -52,7 +52,10 @@ const App = () => {
               <Route path="postJob" element={<PostJob />} />
               <Route path="JobDetails/:jobId" element={<JobDetails />} />
               <Route path="getOnGoingJobs" element={<OnGoingJobs />} />
-              <Route path="getOnGoingJobDetails/:jobId" element={<OnGoingJobDetails />} />
+              <Route
+                path="getOnGoingJobDetails/:jobId"
+                element={<OnGoingJobDetails />}
+              />
             </Route>
           </Route>
         </Route>
