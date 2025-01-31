@@ -21,6 +21,7 @@ import PostJob from "./pages/employer/PostJob";
 import JobDetails from "./pages/employer/JobDetails";
 import OnGoingJobs from "./pages/employer/OnGoingJobs";
 import OnGoingJobDetails from "./pages/employer/OnGoingJobDetails";
+import ViewProfile from "./pages/ViewProfile";
 
 const App = () => {
   return (
@@ -36,6 +37,7 @@ const App = () => {
         <Route element={<ProtectedRoutes />}>
           <Route element={<SidebarLayout />}>
             <Route path="/profile" element={<Profile />} />
+            <Route path="/viewProfile/:userId" element={<ViewProfile/>} />
             <Route element={<FreeLancerRoutes />}>
               <Route path="/home" element={<Home />} />
               <Route path="/job/:jobId" element={<Job />} />
