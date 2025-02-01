@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import axiosInstance from "../../../utils/axiosInstance";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   DollarSign,
   Briefcase,
@@ -47,6 +47,7 @@ const JobDetails = () => {
   const [selectedProposal, setSelectedProposal] = useState<Proposal | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const navigate = useNavigate();
   const { jobId } = useParams();
 
   useEffect(() => {
@@ -348,6 +349,9 @@ const JobDetails = () => {
                         </h3>
                       </div>
                       <p className="text-gray-600">{selectedProposal.freelancer}</p>
+                      <button className="bg-gray-300 px-4 py-2 rounded-md" onClick={() => {
+                        navigate(`/viewProfile/${selectedProposal.freelancer}`)
+                      }}>open freelancer profile</button>
                     </div>
 
                     {/* Submission Date */}
