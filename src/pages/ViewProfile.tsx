@@ -3,6 +3,7 @@ import axiosInstance from "../../utils/axiosInstance";
 import { motion } from "framer-motion";
 import { User, Mail, Calendar, Star, Link as LinkIcon } from "lucide-react";
 import { useParams } from "react-router-dom";
+import RateUser from "../components/RateUser";
 
 type UserDetails = {
   createdOn: string;
@@ -30,6 +31,7 @@ const ViewProfile = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [showRatingModal, setShowRatingModal] = useState<boolean>(false)
 
   const { userId } = useParams();
 
@@ -194,6 +196,10 @@ const ViewProfile = () => {
                   <Star className="w-5 h-5 text-yellow-400 flex-shrink-0" />
                   <span>{userDetails.profile.rating.toFixed(1)} Rating</span>
                 </div>
+                <button onClick={() => {setShowRatingModal(prev => !prev)}} className="px-2 py-2 text-white bg-blue-600 rounded-md">
+                  rate user
+                </button>
+                { showRatingModal && <RateUser setShowRatingModal={setShowRatingModal} userId={userId}/>}
                 <div className="pt-4 border-t border-gray-100">
                   <div className="flex items-start sm:items-center gap-3 text-gray-600">
                     <LinkIcon className="w-5 h-5 flex-shrink-0 mt-1 sm:mt-0" />
