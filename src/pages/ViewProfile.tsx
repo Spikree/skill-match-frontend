@@ -37,7 +37,8 @@ const ViewProfile = () => {
     const getUserDetails = async () => {
       try {
         setIsLoading(true);
-        const response = await axiosInstance.get("/profile/getUser");
+        const response = await axiosInstance.get(`/profile/getUserProfile/${userId}`);
+        console.log(response)
         setUserDetails(response.data.userDetails);
         setError(null);
       } catch (error) {
