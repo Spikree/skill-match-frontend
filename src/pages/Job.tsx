@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import axiosInstance from "../../utils/axiosInstance";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   FaBriefcase,
   FaCalendar,
@@ -29,6 +29,8 @@ const Job = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const { jobId } = useParams();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getJob = async () => {
@@ -143,7 +145,7 @@ const Job = () => {
               <h1 className="text-xl md:text-2xl font-bold text-gray-900 leading-tight">
                 {job.title}
               </h1>
-              <div className="flex items-center gap-2 text-gray-600">
+              <div className="flex items-center gap-2 text-gray-600 cursor-pointer" onClick={() => {navigate(`/viewProfile/${job.employer}`)}}>
                 <FaBriefcase className="w-4 h-4 flex-shrink-0" />
                 <span className="text-sm md:text-base">{job.employerName}</span>
               </div>
