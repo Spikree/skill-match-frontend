@@ -226,12 +226,25 @@ const ViewProfile = () => {
               <h2 className="text-lg font-semibold text-gray-900 mb-4">
                 About
               </h2>
+              <p className="text-gray-600 whitespace-pre-line">
+                  {userDetails.profile.bio}
+                </p>
             </div>
 
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
               <h2 className="text-lg font-semibold text-gray-900 mb-4">
                 Skills
               </h2>
+              <div className="flex flex-wrap gap-2">
+                  {userDetails.profile.skills.map((skill) => (
+                    <span
+                      key={skill}
+                      className="px-3 sm:px-4 py-1.5 sm:py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-medium"
+                    >
+                      {skill}
+                    </span>
+                  ))}
+                </div>
             </div>
           </div>
         </div>
