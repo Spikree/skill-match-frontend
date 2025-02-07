@@ -341,7 +341,8 @@ const JobDetails = () => {
                     </div>
 
                     {/* Freelancer Info */}
-                    <div className="bg-gray-50 p-4 rounded-xl">
+                    <div className="bg-gray-50 p-4 rounded-xl flex justify-between">
+                      <div>
                       <div className="flex items-center gap-3 mb-2">
                         <User2 className="w-5 h-5 text-gray-600" />
                         <h3 className="font-semibold text-gray-900">
@@ -349,6 +350,7 @@ const JobDetails = () => {
                         </h3>
                       </div>
                       <p className="text-gray-600">{selectedProposal.freelancer}</p>
+                      </div>
                       <button className="bg-gray-300 px-4 py-2 rounded-md" onClick={() => {
                         navigate(`/viewProfile/${selectedProposal.freelancer}`)
                       }}>open freelancer profile</button>

@@ -18,6 +18,11 @@ type UserDetails = {
   role: string;
 };
 
+type ratingStats = {
+  averageRating: string;
+  totalRatings: string;
+}
+
 type Review = {
   rating: number;
   review: string;
@@ -32,6 +37,7 @@ const ViewProfile = () => {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [showRatingModal, setShowRatingModal] = useState<boolean>(false)
+  const [ratingsStats, setRatingStats] = useState<ratingStats>()
 
   const { userId } = useParams();
 
@@ -40,8 +46,8 @@ const ViewProfile = () => {
       try {
         setIsLoading(true);
         const response = await axiosInstance.get(`/profile/getUserProfile/${userId}`);
-        console.log(response)
         setUserDetails(response.data.userDetails);
+        setRatingStats(response.data.ratingStats);
         setError(null);
       } catch (error) {
         setError("Failed to load profile. Please try again later.");
@@ -64,7 +70,7 @@ const ViewProfile = () => {
 
     getReview();
     getUserDetails();
-  }, [userId]);
+  }, [userId,showRatingModal]);
 
   if (isLoading) {
     return (
@@ -194,7 +200,13 @@ const ViewProfile = () => {
                 </div>
                 <div className="flex items-center gap-3 text-gray-600">
                   <Star className="w-5 h-5 text-yellow-400 flex-shrink-0" />
-                  <span>{userDetails.profile.rating.toFixed(1)} Rating</span>
+                  <span>{ratingsStats?.averageRating} Rating</span>
+                  
+                </div>
+                
+                <div  className="flex items-center gap-3 text-gray-600">
+                  <User className="w-5 h-5 flex-shrink-0" />
+                <span>Total Ratings : {ratingsStats?.totalRatings}</span>
                 </div>
                 <button onClick={() => {setShowRatingModal(prev => !prev)}} className="px-2 py-2 text-white bg-blue-600 rounded-md">
                   rate user

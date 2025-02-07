@@ -25,6 +25,11 @@ type UserDetails = {
   role: string;
 };
 
+type ratingStats = {
+  averageRating: string;
+  totalRatings: string;
+}
+
 const Profile = () => {
   const [userDetails, setUserDetails] = useState<UserDetails>();
   const [isEditing, setIsEditing] = useState(false);
@@ -34,13 +39,16 @@ const Profile = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
-
+  const [ratingsStats,setRatingsStats] = useState<ratingStats>()
+ 
   useEffect(() => {
     const getUserDetails = async () => {
       try {
         setIsLoading(true);
         const response = await axiosInstance.get("/profile/getUser");
         setUserDetails(response.data.userDetails);
+        setRatingsStats(response.data.ratingStats)
+        console.log(response.data)
         setError(null);
       } catch (error) {
         setError("Failed to load profile. Please try again later.");
