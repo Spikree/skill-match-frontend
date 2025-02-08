@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import React from "react"; 
 import axiosInstance from "../../utils/axiosInstance";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
@@ -80,10 +81,15 @@ const AppliedJobs = () => {
     });
   };
 
+ // Ensure React is imported if needed
+
   const getStatusConfig = (
     status: string
-  ): { color: string; icon: JSX.Element } => {
-    const configs = {
+  ): { color: string; icon: React.ReactElement } => {
+    const configs: Record<
+      "pending" | "accepted" | "rejected",
+      { color: string; icon: React.ReactElement }
+    > = {
       pending: {
         color: "bg-yellow-100 text-yellow-800 border-yellow-200",
         icon: <Clock className="w-4 h-4" />,
@@ -97,13 +103,16 @@ const AppliedJobs = () => {
         icon: <XCircle className="w-4 h-4" />,
       },
     };
+  
     return (
-      configs[status.toLowerCase()] || {
+      configs[status.toLowerCase() as "pending" | "accepted" | "rejected"] || {
         color: "bg-gray-100 text-gray-800 border-gray-200",
         icon: <Clock className="w-4 h-4" />,
       }
     );
   };
+  
+  
 
   const toggleJobExpansion = (jobId: string) => {
     setExpandedJob(expandedJob === jobId ? null : jobId);

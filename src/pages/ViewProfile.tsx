@@ -18,6 +18,10 @@ type UserDetails = {
   role: string;
 };
 
+type RouteParams = {
+  userId: string;
+}
+
 type ratingStats = {
   averageRating: string;
   totalRatings: string;
@@ -39,7 +43,7 @@ const ViewProfile = () => {
   const [showRatingModal, setShowRatingModal] = useState<boolean>(false)
   const [ratingsStats, setRatingStats] = useState<ratingStats>()
 
-  const { userId } = useParams();
+  const { userId = "abc" } = useParams<RouteParams>();
 
   useEffect(() => {
     const getUserDetails = async () => {

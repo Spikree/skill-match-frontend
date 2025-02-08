@@ -232,7 +232,7 @@ const Job = () => {
           <button
             className="px-4 py-2 bg-red-300 text-center pb-2 rounded-md"
           >
-            Closed
+           Applications Closed
           </button>
         )}
       </div>

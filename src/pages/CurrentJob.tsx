@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import axiosInstance from "../../utils/axiosInstance";
 import { useNavigate } from "react-router-dom";
 import { Briefcase } from "lucide-react";
-import { div } from "framer-motion/client";
 
 type JobType = {
   _id: string;

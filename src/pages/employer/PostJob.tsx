@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import axiosInstance from "../../../utils/axiosInstance";
 import { ToastContainer, toast } from "react-toastify";
+import axios from "axios";
 
 type FormData = {
   title: string;
@@ -27,17 +28,19 @@ function App() {
 
   const postAJob = async (formData: FormData) => {
     try {
-     const response = await axiosInstance.post('/job/createJob', formData)
-     console.log(response)
-     toast.success(response.data.message)
-     setTitle("")
-     setDescription("")
-     setBudget("")
-     setSkillsRequired([])
-     setIsSubmitting(false)
-    } catch (error) {
-      console.error(error);
-      toast.error(error.response.data.message)
+      const response = await axiosInstance.post('/job/createJob', formData);
+      console.log(response);
+      toast.success(response.data.message);
+      setTitle("");
+      setDescription("");
+      setBudget("");
+      setSkillsRequired([]);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.data?.message || "An error occurred while posting the job.");
+      } else {
+        toast.error("An unexpected error occurred.");
+      }
     } finally {
       setIsSubmitting(false);
     }

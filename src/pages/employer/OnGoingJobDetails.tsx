@@ -13,6 +13,7 @@ import {
   Check,
 } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
+import axios from "axios";
 
 type Job = {
   budget: string;
@@ -56,8 +57,12 @@ const OnGoingJobDetails = () => {
         const response = await axiosInstance.get(`job/getJob/${jobId}`);
         setJob(response.data.job);
         setError(null);
-      } catch (err: any) {
-        setError("Failed to fetch job details. Please try again.");
+      } catch (err: unknown) {
+        if (axios.isAxiosError(err)) {
+          setError(err.response?.data?.message || "Failed to fetch job details. Please try again.");
+        } else {
+          setError("An unexpected error occurred.");
+        }
         console.error(err);
       } finally {
         setLoading(false);

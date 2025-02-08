@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import axiosInstance from "../../../utils/axiosInstance";
-import { Briefcase, Clock, DollarSign, UserCheck, Info } from "lucide-react";
+import { Briefcase, Clock, DollarSign, UserCheck } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 type Job = {
