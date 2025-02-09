@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { FiClock, FiDollarSign } from "react-icons/fi";
 import axiosInstance from "../../../utils/axiosInstance";
 import { useNavigate } from "react-router-dom";
+import { FlipVertical as EllipsisVertical, Trash2 } from "lucide-react";
 
 type Job = {
   budget: string;
@@ -18,6 +19,7 @@ type Job = {
 
 const Dashboard = () => {
   const [allJobs, setAllJobs] = useState<Job[]>([]);
+  const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -31,6 +33,13 @@ const Dashboard = () => {
     };
 
     getAllJobs();
+  }, []);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = () => setOpenDropdownId(null);
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
   }, []);
 
   const cardVariants = {
@@ -48,6 +57,18 @@ const Dashboard = () => {
         duration: 0.2,
       },
     },
+  };
+
+  const handleDropdownClick = (e: React.MouseEvent, jobId: string) => {
+    e.stopPropagation(); 
+    setOpenDropdownId(openDropdownId === jobId ? null : jobId);
+  };
+
+  const handleDelete = (e: React.MouseEvent, jobId: string) => {
+    e.stopPropagation();
+    
+    console.log('Delete job:', jobId);
+    setOpenDropdownId(null);
   };
 
   return (
@@ -112,7 +133,9 @@ const Dashboard = () => {
                     <div className="flex flex-col gap-3">
                       <div className="flex items-center text-gray-600">
                         <FiDollarSign className="w-5 h-5 text-blue-500 mr-2.5" />
-                        <span className="text-sm font-medium">{job.budget}</span>
+                        <span className="text-sm font-medium">
+                          {job.budget}
+                        </span>
                       </div>
                       <div className="flex items-center text-gray-600">
                         <FiClock className="w-5 h-5 text-purple-500 mr-2.5" />
@@ -132,15 +155,34 @@ const Dashboard = () => {
                     </div>
 
                     <motion.button
-                    onClick={() => {
-                      navigate(`/JobDetails/${job._id}`)
-                    }}
+                      onClick={() => {
+                        navigate(`/JobDetails/${job._id}`);
+                      }}
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       className="w-full bg-gradient-to-r from-blue-600 to-blue-500 text-white px-6 py-2.5 rounded-xl text-sm font-medium hover:from-blue-700 hover:to-blue-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm hover:shadow"
                     >
                       View Details
                     </motion.button>
+                  </div>
+                  <div className="relative">
+                    <button
+                      onClick={(e) => handleDropdownClick(e, job._id)}
+                      className="p-2 hover:bg-gray-100 rounded-full transition-colors duration-200"
+                    >
+                      <EllipsisVertical className="w-5 h-5 text-gray-600" />
+                    </button>
+                    {openDropdownId === job._id && (
+                      <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-100 py-1 z-10">
+                        <button
+                          onClick={(e) => handleDelete(e, job._id)}
+                          className="w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2 transition-colors duration-200"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                          Delete Job
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
