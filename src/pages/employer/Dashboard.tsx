@@ -4,6 +4,7 @@ import { FiClock, FiDollarSign } from "react-icons/fi";
 import axiosInstance from "../../../utils/axiosInstance";
 import { useNavigate } from "react-router-dom";
 import { FlipVertical as EllipsisVertical, Trash2 } from "lucide-react";
+import { ToastContainer, toast } from "react-toastify";
 
 type Job = {
   budget: string;
@@ -22,24 +23,24 @@ const Dashboard = () => {
   const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const getAllJobs = async () => {
-      try {
-        const response = await axiosInstance.get("/job/getCreatedJobs");
-        setAllJobs(response.data.jobs);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+  const getAllJobs = async () => {
+    try {
+      const response = await axiosInstance.get("/job/getCreatedJobs");
+      setAllJobs(response.data.jobs);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
+  useEffect(() => {
     getAllJobs();
   }, []);
 
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = () => setOpenDropdownId(null);
-    document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
   const cardVariants = {
@@ -60,19 +61,28 @@ const Dashboard = () => {
   };
 
   const handleDropdownClick = (e: React.MouseEvent, jobId: string) => {
-    e.stopPropagation(); 
+    e.stopPropagation();
     setOpenDropdownId(openDropdownId === jobId ? null : jobId);
   };
 
-  const handleDelete = (e: React.MouseEvent, jobId: string) => {
+  const handleDelete = async (e: React.MouseEvent, jobId: string) => {
     e.stopPropagation();
-    
-    console.log('Delete job:', jobId);
+    try {
+      const response = await axiosInstance.delete(`/job/deleteJob/${jobId}`);
+      console.log(response);
+      toast.success(response.data.message);
+      getAllJobs();
+    } catch (error) {
+      console.log(error);
+    }
+
+    console.log("Delete job:", jobId);
     setOpenDropdownId(null);
   };
 
   return (
     <div className="pt-12 sm:pt-0 h-full overflow-y-auto">
+      <ToastContainer />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
