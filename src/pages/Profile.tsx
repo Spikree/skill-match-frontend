@@ -48,7 +48,7 @@ const Profile = () => {
         const response = await axiosInstance.get("/profile/getUser");
         setUserDetails(response.data.userDetails);
         setRatingsStats(response.data.ratingStats)
-        console.log(response.data)
+        // console.log(ratingsStats)
         setError(null);
       } catch (error) {
         setError("Failed to load profile. Please try again later.");
@@ -279,7 +279,7 @@ const Profile = () => {
                 </div>
                 <div className="flex items-center gap-3 text-gray-600">
                   <Star className="w-5 h-5 text-yellow-400 flex-shrink-0" />
-                  <span>{userDetails.profile.rating.toFixed(1)} Rating</span>
+                  <span>{ratingsStats?.averageRating} Rating</span>
                 </div>
                 <div className="pt-4 border-t border-gray-100">
                   <div className="flex items-start sm:items-center gap-3 text-gray-600">
