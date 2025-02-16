@@ -13,7 +13,7 @@ import {
   FiLogOut,
   FiHome,
   FiPlusCircle,
-  FiCloudSnow,
+  // FiCloudSnow,
   FiSave,
   // FiClipboard,
 } from "react-icons/fi";
