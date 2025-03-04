@@ -22,6 +22,10 @@ import JobDetails from "./pages/employer/JobDetails";
 import OnGoingJobs from "./pages/employer/OnGoingJobs";
 import OnGoingJobDetails from "./pages/employer/OnGoingJobDetails";
 import ViewProfile from "./pages/ViewProfile";
+import Chat from "./pages/Chat";
+import ChatRoom from "./pages/chatRoom";
+import EmpChat from "./pages/employer/EmpChat";
+
 
 const App = () => {
   return (
@@ -35,7 +39,10 @@ const App = () => {
         <Route path="/create-account" element={<CreateAccount />} />
 
         <Route element={<ProtectedRoutes />}>
+        
           <Route element={<SidebarLayout />}>
+          <Route path="/chat" element={<Chat/>}/>
+          <Route path="/chatRoom/:id" element={<ChatRoom/>} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/viewProfile/:userId" element={<ViewProfile/>} />
             <Route element={<FreeLancerRoutes />}>
@@ -50,6 +57,8 @@ const App = () => {
 
           <Route element={<EmployerRoutes />}>
             <Route element={<SidebarLayout />}>
+            <Route path="/chatEmp" element={<EmpChat/>}/>
+            <Route path="/chatRoom/:id" element={<ChatRoom/>} />
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="postJob" element={<PostJob />} />
               <Route path="JobDetails/:jobId" element={<JobDetails />} />

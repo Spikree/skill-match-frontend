@@ -15,6 +15,7 @@ import {
   FiPlusCircle,
   FiSave,
 } from "react-icons/fi";
+import { MessageSquareText } from "lucide-react";
 
 const MobileNav = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -37,6 +38,7 @@ const MobileNav = () => {
     { title: "Finished Jobs", icon: <MdWorkHistory size={20} />, to: "/finishedJobs" },
     { title: "Saved Jobs", icon: <FiBook size={20} />, to: "/savedJobs" },
     { title: "Current Job", icon: <FiStar size={20} />, to: "/currentJob" },
+    { title: "Chat", icon: <MessageSquareText size={20}/>, to: "/chat" },
   ];
 
   const employerMenuItems = [
@@ -51,6 +53,7 @@ const MobileNav = () => {
             icon: <FiSave size={20} />,
             to: "/getOnGoingJobs",
           },
+          { title: "Chat", icon: <MessageSquareText size={20}/>, to: "/chatEmp" },
     ];
   
 
