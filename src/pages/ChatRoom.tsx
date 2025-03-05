@@ -55,12 +55,20 @@ const ChatRoom = () => {
     if (!socket.connected) {
       socket.connect();
     }
+
+    if (userId) {
+      socket.emit("join", userId);
+      socket.emit("joinChat", [userId, chatId].sort().join('_'));
+    }
   
     fetchMessages();
   
     socket.on("newMessage", (data) => {
-      console.log("Received message:", data);
-      setMessages((prevMessages) => [...prevMessages, data]);
+      // Only add message if it belongs to this specific chat
+      const chatIdentifier = [userId, chatId].sort().join('_');
+      if (data.chatId === chatIdentifier) {
+        setMessages((prevMessages) => [...prevMessages, data]);
+      }
     });
   
     return () => {
@@ -69,11 +77,11 @@ const ChatRoom = () => {
   }, [chatId]);
   
   useEffect(() => {
-    if (userId) {
-      socket.emit("join", userId);
-    }
+    // if (userId) {
+    //   socket.emit("join", userId);
+    // }
     scrollToBottom();
-  }, [messages, userId]);
+  }, [messages]);
 
   const sendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
