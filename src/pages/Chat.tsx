@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axiosInstance from "../../utils/axiosInstance";
 import { useNavigate } from "react-router-dom";
+import { socket } from "../../utils/socket";
 
 type JobType = {
   _id: string;
@@ -17,6 +18,9 @@ const Chat = () => {
   const [currentJobs, setCurrentJobs] = useState<JobType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const currentUser = localStorage.getItem("userId");
+  const userId = currentUser
 
   const router = useNavigate();
 
@@ -38,6 +42,7 @@ const Chat = () => {
   }, []);
 
   const openChat = (toChatId: string) => {
+    
     router(`/chatRoom/${toChatId}`)
   }
 
