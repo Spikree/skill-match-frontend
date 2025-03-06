@@ -1,8 +1,9 @@
 import { useEffect, useState, useRef } from "react";
-import {  useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
 import { Send, MoreVertical } from "lucide-react";
 import { socket } from "../../utils/socket.ts";
+import { motion } from "framer-motion";
 
 // Type definition for messages
 type Message = {
@@ -22,11 +23,13 @@ const ChatRoom = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [isTyping, setIsTyping] = useState<boolean>(false);
+  const [typingUser, setTypingUser] = useState(null);
+  const typingTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const [isUserActive, setIsUserActive] = useState<boolean>(false);
 
-  // Get current user ID from localStorage
   const currentUser = localStorage.getItem("userId");
 
-  // Fallback to hardcoded ID if localStorage is empty
   const userId = currentUser;
 
   const scrollToBottom = () => {
@@ -51,6 +54,51 @@ const ChatRoom = () => {
     }
   };
 
+  const handleTyping = () => {
+    if (!isTyping) {
+      socket.emit("typing", {
+        senderId: userId,
+        receiverId: chatId,
+        chatId: [userId, chatId].sort().join("_"),
+      });
+      setIsTyping(true);
+    }
+
+    // Clear any existing timer
+    if (typingTimerRef.current) {
+      clearTimeout(typingTimerRef.current);
+    }
+
+    // Set a new timer to stop typing after 2 seconds of inactivity
+    typingTimerRef.current = setTimeout(() => {
+      socket.emit("stopTyping", {
+        senderId: userId,
+        receiverId: chatId,
+        chatId: [userId, chatId].sort().join("_"),
+      });
+      setIsTyping(false);
+    }, 2000);
+  };
+
+  useEffect(() => {
+    socket.on("userTyping", (data) => {
+      if (data.chatId === [userId, chatId].sort().join("_")) {
+        setTypingUser(data.isTyping ? data.senderId : null);
+      }
+    });
+
+    return () => {
+      // Existing cleanup
+      socket.off("newMessage");
+      socket.off("userTyping");
+
+      // Clear any pending timers
+      if (typingTimerRef.current) {
+        clearTimeout(typingTimerRef.current);
+      }
+    };
+  }, []);
+
   useEffect(() => {
     if (!socket.connected) {
       socket.connect();
@@ -58,24 +106,33 @@ const ChatRoom = () => {
 
     if (userId) {
       socket.emit("join", userId);
-      socket.emit("joinChat", [userId, chatId].sort().join('_'));
+      socket.emit("joinChat", [userId, chatId].sort().join("_"));
     }
-  
+
     fetchMessages();
-  
+
+    socket.emit("setActiveStatus", userId);
+
+    socket.on("userActiveStatus", (data) => {
+      if (data.userId === chatId) {
+        setIsUserActive(data.isActive);
+      }
+    });
+
     socket.on("newMessage", (data) => {
       // Only add message if it belongs to this specific chat
-      const chatIdentifier = [userId, chatId].sort().join('_');
+      const chatIdentifier = [userId, chatId].sort().join("_");
       if (data.chatId === chatIdentifier) {
         setMessages((prevMessages) => [...prevMessages, data]);
       }
     });
-  
+
     return () => {
       socket.off("newMessage");
+      socket.off("userActiveStatus");
     };
   }, [chatId]);
-  
+
   useEffect(() => {
     // if (userId) {
     //   socket.emit("join", userId);
@@ -93,7 +150,10 @@ const ChatRoom = () => {
         `/message/sendMessage/${chatId}`,
         { text }
       );
-      setMessages((prevMessages) => [...prevMessages, response.data.newMessage]);
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        response.data.newMessage,
+      ]);
 
       // socket.emit("message", { user: userId, text: text });
       setText(""); // Clear input
@@ -143,7 +203,11 @@ const ChatRoom = () => {
             <div className="flex flex-col">
               <h2 className="text-xl font-bold text-gray-800">Chat Room</h2>
               <p className="text-xs text-gray-500">
-                {loading ? "Connecting..." : "Active now"}
+                {isUserActive ? (
+                  <div className="text-green-500">Online</div>
+                ) : (
+                  <div className="text-gray-500">Offline</div>
+                )}
               </p>
             </div>
           </div>
@@ -224,13 +288,50 @@ const ChatRoom = () => {
           <div ref={messagesEndRef} />
         </div>
 
+        {typingUser && (
+          <div className="flex items-center space-x-1 p-2 mx-6 my-2 bg-gray-200 rounded-2xl w-fit">
+            <motion.div
+              className="w-2.5 h-2.5 bg-gray-500 rounded-full"
+              animate={{ y: [0, -3, 0] }}
+              transition={{
+                repeat: Infinity,
+                duration: 0.6,
+                ease: "easeInOut",
+              }}
+            />
+            <motion.div
+              className="w-2.5 h-2.5 bg-gray-500 rounded-full"
+              animate={{ y: [0, -3, 0] }}
+              transition={{
+                repeat: Infinity,
+                duration: 0.6,
+                ease: "easeInOut",
+                delay: 0.2,
+              }}
+            />
+            <motion.div
+              className="w-2.5 h-2.5 bg-gray-500 rounded-full"
+              animate={{ y: [0, -3, 0] }}
+              transition={{
+                repeat: Infinity,
+                duration: 0.6,
+                ease: "easeInOut",
+                delay: 0.4,
+              }}
+            />
+          </div>
+        )}
+
         {/* Input Field */}
         <form onSubmit={sendMessage} className="p-4 border-t bg-white">
           <div className="flex gap-3 items-center">
             <input
               type="text"
               value={text}
-              onChange={(e) => setText(e.target.value)}
+              onChange={(e) => {
+                setText(e.target.value);
+                handleTyping(); // Trigger typing indicator when user types
+              }}
               className="flex-1 border border-gray-300 p-3 rounded-full outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent text-base shadow-sm"
               placeholder="Type a message..."
               disabled={loading}

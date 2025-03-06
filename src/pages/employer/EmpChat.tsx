@@ -25,7 +25,7 @@ const EmpChat = () => {
         setIsLoading(true);
         const response = await axiosInstance.get("/job/getOnGoingJobs");
         console.log(response);
-        setCurrentJobs(response.data.jobs);  // ✅ Fix applied here
+        setCurrentJobs(response.data.jobs);
         console.log(response.data.jobs);
       } catch (error) {
         setError("Failed to load current jobs");
