@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
-import { Send, MoreVertical } from "lucide-react";
+import { Send, MoreVertical, Copy, Check } from "lucide-react";
 import { socket } from "../../utils/socket.ts";
 import { motion } from "framer-motion";
 
@@ -27,6 +27,7 @@ const ChatRoom = () => {
   const [typingUser, setTypingUser] = useState(null);
   const typingTimerRef = useRef<NodeJS.Timeout | null>(null);
   const [isUserActive, setIsUserActive] = useState<boolean>(false);
+  const [copiedLinks, setCopiedLinks] = useState<Record<string, boolean>>({});
 
   const currentUser = localStorage.getItem("userId");
 
@@ -134,9 +135,6 @@ const ChatRoom = () => {
   }, [chatId]);
 
   useEffect(() => {
-    // if (userId) {
-    //   socket.emit("join", userId);
-    // }
     scrollToBottom();
   }, [messages]);
 
@@ -155,7 +153,6 @@ const ChatRoom = () => {
         response.data.newMessage,
       ]);
 
-      // socket.emit("message", { user: userId, text: text });
       setText(""); // Clear input
     } catch (error) {
       console.error("Error sending message:", error);
@@ -177,6 +174,88 @@ const ChatRoom = () => {
     });
   };
 
+  // Function to detect URLs in text
+  const detectUrls = (text: string) => {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    return text.match(urlRegex) || [];
+  };
+
+  // Function to handle copying a link
+  const copyToClipboard = (link: string, msgId: string) => {
+    navigator.clipboard.writeText(link).then(() => {
+      // Set copied state for this specific link
+      setCopiedLinks({ ...copiedLinks, [`${msgId}-${link}`]: true });
+      
+      // Reset copied state after 2 seconds
+      setTimeout(() => {
+        setCopiedLinks({ ...copiedLinks, [`${msgId}-${link}`]: false });
+      }, 2000);
+    });
+  };
+  
+  // Function to render message text with URL detection
+  const renderMessageText = (message: Message) => {
+    const urls = detectUrls(message.text);
+    
+    if (urls.length === 0) {
+      return <p className="break-words text-base leading-relaxed">{message.text}</p>;
+    }
+    
+    // Replace URLs with placeholders for splitting
+    let textWithPlaceholders = message.text;
+    const urlMap: Record<string, string> = {};
+    
+    urls.forEach((url, index) => {
+      const placeholder = `__URL_${index}__`;
+      textWithPlaceholders = textWithPlaceholders.replace(url, placeholder);
+      urlMap[placeholder] = url;
+    });
+    
+    // Split by placeholders
+    const parts = textWithPlaceholders.split(/(__URL_\d+__)/);
+    
+    return (
+      <div className="space-y-2">
+        <p className="break-words text-base leading-relaxed">
+          {parts.map((part, index) => {
+            if (urlMap[part]) {
+              return (
+                <span key={index} className="text-blue-400 hover:underline">
+                  <a href={urlMap[part]} target="_blank" rel="noopener noreferrer">
+                    {urlMap[part]}
+                  </a>
+                </span>
+              );
+            }
+            return <span key={index}>{part}</span>;
+          })}
+        </p>
+        
+        {urls.map((url, index) => (
+          <div 
+            key={index} 
+            className="mt-2 bg-gray-100 dark:bg-gray-800 rounded-md p-2 flex justify-between items-center"
+          >
+            <div className="truncate flex-1 text-sm text-gray-700 dark:text-gray-300">
+              {url}
+            </div>
+            <button
+              onClick={() => copyToClipboard(url, message._id)}
+              className="ml-2 p-1.5 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+              title="Copy link"
+            >
+              {copiedLinks[`${message._id}-${url}`] ? (
+                <Check size={16} className="text-green-500" />
+              ) : (
+                <Copy size={16} className="text-gray-500" />
+              )}
+            </button>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   // Group messages by date
   const groupMessagesByDate = () => {
     const groups: { [key: string]: Message[] } = {};
@@ -195,7 +274,7 @@ const ChatRoom = () => {
   const messageGroups = groupMessagesByDate();
 
   return (
-    <div className="flex items-center justify-center w-full  bg-gradient-to-b from-blue-50 to-gray-100 p-4 overflow-y-auto">
+    <div className="flex items-center justify-center w-full bg-gradient-to-b from-blue-50 to-gray-100 p-4 overflow-y-auto">
       <div className="flex flex-col w-full max-w-4xl h-[90vh] rounded-xl shadow-2xl bg-white overflow-hidden">
         {/* Chat Header */}
         <div className="px-6 py-4 border-b bg-white flex items-center justify-between">
@@ -267,9 +346,7 @@ const ChatRoom = () => {
                           : "bg-gray-100 text-gray-800 rounded-bl-none border border-gray-200"
                       }`}
                     >
-                      <p className="break-words text-base leading-relaxed">
-                        {msg.text}
-                      </p>
+                      {renderMessageText(msg)}
                       <p
                         className={`text-xs mt-2 ${
                           msg.senderId === userId
