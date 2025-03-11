@@ -100,39 +100,45 @@ const ChatRoom = () => {
     };
   }, []);
 
-  useEffect(() => {
-    if (!socket.connected) {
-      socket.connect();
+// In your ChatRoom component, update these parts:
+
+// Update the socket emit for setActiveStatus
+useEffect(() => {
+  if (!socket.connected) {
+    socket.connect();
+  }
+
+  if (userId) {
+    // Store the userId in socket's auth object for reconnection
+    socket.auth = { userId };
+    
+    socket.emit("join", userId);
+    socket.emit("joinChat", [userId, chatId].sort().join("_"));
+    
+    // Pass userId as an object to match server expectations
+    socket.emit("setActiveStatus", { userId });
+  }
+
+  fetchMessages();
+
+  // Existing listener for active status
+  socket.on("userActiveStatus", (data) => {
+    if (data.userId === chatId) {
+      setIsUserActive(data.isActive);
     }
+  });
 
-    if (userId) {
-      socket.emit("join", userId);
-      socket.emit("joinChat", [userId, chatId].sort().join("_"));
+  return () => {
+    socket.off("newMessage");
+    socket.off("userActiveStatus");
+    socket.off("userTyping");
+    
+    // Clear any pending timers
+    if (typingTimerRef.current) {
+      clearTimeout(typingTimerRef.current);
     }
-
-    fetchMessages();
-
-    socket.emit("setActiveStatus", userId);
-
-    socket.on("userActiveStatus", (data) => {
-      if (data.userId === chatId) {
-        setIsUserActive(data.isActive);
-      }
-    });
-
-    socket.on("newMessage", (data) => {
-      // Only add message if it belongs to this specific chat
-      const chatIdentifier = [userId, chatId].sort().join("_");
-      if (data.chatId === chatIdentifier) {
-        setMessages((prevMessages) => [...prevMessages, data]);
-      }
-    });
-
-    return () => {
-      socket.off("newMessage");
-      socket.off("userActiveStatus");
-    };
-  }, [chatId]);
+  };
+}, [chatId, userId]);
 
   useEffect(() => {
     scrollToBottom();
