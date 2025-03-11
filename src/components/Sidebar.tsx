@@ -18,6 +18,7 @@ import {
   // FiClipboard,
 } from "react-icons/fi";
 import { MessageSquareText } from "lucide-react";
+import { socket } from "../../utils/socket.ts";
 
 
 
@@ -29,6 +30,7 @@ const Sidebar = () => {
   const username = localStorage.getItem("username");
   const useremail = localStorage.getItem("useremail");
   const userRole = localStorage.getItem("role");
+  const userId = localStorage.getItem("userId")
 
   const dontShowProfileOptions = () => {
     if (showProfileOptions) {
@@ -86,6 +88,7 @@ const Sidebar = () => {
         localStorage.removeItem("useremail");
         localStorage.removeItem("role");
         navigate("/login");
+        socket.emit("userLogout", userId);
       },
     },
   ];

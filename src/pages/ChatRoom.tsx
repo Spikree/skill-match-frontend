@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
 import { Send, MoreVertical, Copy, Check } from "lucide-react";
-import { socket } from "../../utils/socket.ts";
+import { socket } from "../../utils/socket";
 import { motion } from "framer-motion";
 
 // Type definition for messages
@@ -14,6 +14,7 @@ type Message = {
   createdAt: string;
   updatedAt: string;
   __v: number;
+  chatId?: string;
 };
 
 const ChatRoom = () => {
@@ -30,8 +31,8 @@ const ChatRoom = () => {
   const [copiedLinks, setCopiedLinks] = useState<Record<string, boolean>>({});
 
   const currentUser = localStorage.getItem("userId");
-
   const userId = currentUser;
+  const actualChatId = userId && chatId ? [userId, chatId].sort().join("_") : "";
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -56,11 +57,11 @@ const ChatRoom = () => {
   };
 
   const handleTyping = () => {
-    if (!isTyping) {
+    if (!isTyping && actualChatId) {
       socket.emit("typing", {
         senderId: userId,
         receiverId: chatId,
-        chatId: [userId, chatId].sort().join("_"),
+        chatId: actualChatId
       });
       setIsTyping(true);
     }
@@ -72,74 +73,85 @@ const ChatRoom = () => {
 
     // Set a new timer to stop typing after 2 seconds of inactivity
     typingTimerRef.current = setTimeout(() => {
-      socket.emit("stopTyping", {
-        senderId: userId,
-        receiverId: chatId,
-        chatId: [userId, chatId].sort().join("_"),
-      });
-      setIsTyping(false);
-    }, 2000);
+      if (actualChatId) {
+        socket.emit("stopTyping", {
+          senderId: userId,
+          receiverId: chatId,
+          chatId: actualChatId
+        });
+        setIsTyping(false);
+      }
+    }, 200);
   };
 
+  // Setup socket connection
   useEffect(() => {
+    if (!socket.connected) {
+      socket.connect();
+    }
+
+    if (userId) {
+      // Store the userId in socket's auth object for reconnection
+      socket.auth = { userId };
+      
+      // Join personal room and chat room
+      socket.emit("join", userId);
+      
+      if (actualChatId) {
+        socket.emit("joinChat", actualChatId);
+      }
+      
+      // Set active status
+      socket.emit("setActiveStatus", { userId });
+    }
+
+    // Fetch initial messages
+    fetchMessages();
+
+    // Clear existing listeners to prevent duplicates
+    socket.off("newMessage");
+    socket.off("userActiveStatus");
+    socket.off("userTyping");
+
+    // Listen for new messages
+    socket.on("newMessage", (newMsg) => {
+      // Only add message if it belongs to the current chat
+      if (
+        (newMsg.senderId === userId && newMsg.receiverId === chatId) ||
+        (newMsg.senderId === chatId && newMsg.receiverId === userId)
+      ) {
+        setMessages((prevMessages) => [...prevMessages, newMsg]);
+      }
+    });
+
+    // Listen for active status
+    socket.on("userActiveStatus", (data) => {
+      if (data.userId === chatId) {
+        setIsUserActive(data.isActive);
+      }
+    });
+
+    // Listen for typing indicators
     socket.on("userTyping", (data) => {
-      if (data.chatId === [userId, chatId].sort().join("_")) {
+      if (data.chatId === actualChatId && data.senderId !== userId) {
         setTypingUser(data.isTyping ? data.senderId : null);
       }
     });
 
+    // Cleanup function
     return () => {
-      // Existing cleanup
       socket.off("newMessage");
+      socket.off("userActiveStatus");
       socket.off("userTyping");
-
+      
       // Clear any pending timers
       if (typingTimerRef.current) {
         clearTimeout(typingTimerRef.current);
       }
     };
-  }, []);
+  }, [chatId, userId, actualChatId]);
 
-// In your ChatRoom component, update these parts:
-
-// Update the socket emit for setActiveStatus
-useEffect(() => {
-  if (!socket.connected) {
-    socket.connect();
-  }
-
-  if (userId) {
-    // Store the userId in socket's auth object for reconnection
-    socket.auth = { userId };
-    
-    socket.emit("join", userId);
-    socket.emit("joinChat", [userId, chatId].sort().join("_"));
-    
-    // Pass userId as an object to match server expectations
-    socket.emit("setActiveStatus", { userId });
-  }
-
-  fetchMessages();
-
-  // Existing listener for active status
-  socket.on("userActiveStatus", (data) => {
-    if (data.userId === chatId) {
-      setIsUserActive(data.isActive);
-    }
-  });
-
-  return () => {
-    socket.off("newMessage");
-    socket.off("userActiveStatus");
-    socket.off("userTyping");
-    
-    // Clear any pending timers
-    if (typingTimerRef.current) {
-      clearTimeout(typingTimerRef.current);
-    }
-  };
-}, [chatId, userId]);
-
+  // Scroll to bottom when messages change
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
