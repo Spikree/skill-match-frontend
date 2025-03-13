@@ -44,7 +44,9 @@ type Proposal = {
 const JobDetails = () => {
   const [job, setJob] = useState<Job>();
   const [proposals, setProposals] = useState<Proposal[]>();
-  const [selectedProposal, setSelectedProposal] = useState<Proposal | null>(null);
+  const [selectedProposal, setSelectedProposal] = useState<Proposal | null>(
+    null
+  );
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const navigate = useNavigate();
@@ -75,13 +77,15 @@ const JobDetails = () => {
 
   const handleAcceptProposal = async (proposalId: string) => {
     try {
-      const response = await axiosInstance.post(`/job/acceptProposal/${jobId}/${proposalId}`)
-      toast.success(response.data.message)
-      setIsModalOpen(false)
+      const response = await axiosInstance.post(
+        `/job/acceptProposal/${jobId}/${proposalId}`
+      );
+      toast.success(response.data.message);
+      setIsModalOpen(false);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -104,6 +108,11 @@ const JobDetails = () => {
     setSelectedProposal(null);
   };
 
+  const openChat = (toChatId: string) => {
+    
+    navigate(`/chatRoom/${toChatId}`)
+  }
+
   // Handle clicking outside modal to close
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
@@ -113,7 +122,7 @@ const JobDetails = () => {
 
   return (
     <div className="h-full overflow-y-auto bg-gradient-to-br p-4 sm:p-6 pt-20 sm:pt-0">
-    <ToastContainer/>
+      <ToastContainer />
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -148,7 +157,9 @@ const JobDetails = () => {
                     <User className="w-5 h-5 mr-3 text-gray-600" />
                     <div>
                       <p className="text-sm text-gray-600">Posted by</p>
-                      <p className="font-medium text-gray-900">{job.employerName}</p>
+                      <p className="font-medium text-gray-900">
+                        {job.employerName}
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center p-4 bg-gray-50 rounded-xl">
@@ -179,7 +190,9 @@ const JobDetails = () => {
                       <FileText className="mr-3 text-blue-600" />
                       Job Description
                     </h2>
-                    <p className="text-gray-700 leading-relaxed">{job.description}</p>
+                    <p className="text-gray-700 leading-relaxed">
+                      {job.description}
+                    </p>
                   </motion.div>
 
                   <div>
@@ -188,7 +201,7 @@ const JobDetails = () => {
                       Required Skills
                     </h2>
                     <div className="flex flex-wrap gap-2">
-                      {job.skillsRequired.map(skill => (
+                      {job.skillsRequired.map((skill) => (
                         <motion.span
                           key={skill}
                           initial={{ scale: 0 }}
@@ -256,7 +269,9 @@ const JobDetails = () => {
                           <div className="flex items-center text-xs sm:text-sm text-gray-600 mb-2 sm:mb-4">
                             <Clock className="mr-2 w-3 h-3 sm:w-4 sm:h-4" />
                             Submitted on{" "}
-                            {new Date(proposal.submittedAt).toLocaleDateString()}
+                            {new Date(
+                              proposal.submittedAt
+                            ).toLocaleDateString()}
                           </div>
                           <div className="bg-white p-3 sm:p-4 rounded-lg">
                             <p className="text-xs sm:text-sm text-gray-700 leading-relaxed line-clamp-2">
@@ -324,7 +339,9 @@ const JobDetails = () => {
                     <div className="flex flex-wrap gap-4">
                       <div className="flex items-center gap-2 bg-green-100 text-green-800 px-4 py-2 rounded-lg">
                         <DollarSign className="w-5 h-5" />
-                        <span className="font-semibold">{selectedProposal.bidAmount}</span>
+                        <span className="font-semibold">
+                          {selectedProposal.bidAmount}
+                        </span>
                       </div>
                       <div
                         className={`flex items-center gap-2 px-4 py-2 rounded-lg ${
@@ -336,24 +353,46 @@ const JobDetails = () => {
                         }`}
                       >
                         {getStatusIcon(selectedProposal.status)}
-                        <span className="font-medium">{selectedProposal.status}</span>
+                        <span className="font-medium">
+                          {selectedProposal.status}
+                        </span>
                       </div>
                     </div>
 
                     {/* Freelancer Info */}
                     <div className="bg-gray-50 p-4 rounded-xl flex justify-between">
                       <div>
-                      <div className="flex items-center gap-3 mb-2">
-                        <User2 className="w-5 h-5 text-gray-600" />
-                        <h3 className="font-semibold text-gray-900">
-                          Freelancer Details
-                        </h3>
+                        <div className="flex items-center gap-3 mb-2">
+                          <User2 className="w-5 h-5 text-gray-600" />
+                          <h3 className="font-semibold text-gray-900">
+                            Freelancer Details
+                          </h3>
+                        </div>
+                        <p className="text-gray-600">
+                          {selectedProposal.freelancer}
+                        </p>
                       </div>
-                      <p className="text-gray-600">{selectedProposal.freelancer}</p>
+                      <div className="flex gap-2">
+                      <button
+                        className="bg-gray-300 px-4 rounded-md"
+                        onClick={() => {
+                          openChat(selectedProposal.freelancer);
+                        }}
+                      >
+                        Message
+                      </button>
+
+                      <button
+                        className="bg-gray-300 px-4 py-2 rounded-md"
+                        onClick={() => {
+                          navigate(
+                            `/viewProfile/${selectedProposal.freelancer}`
+                          );
+                        }}
+                      >
+                        open freelancer profile
+                      </button>
                       </div>
-                      <button className="bg-gray-300 px-4 py-2 rounded-md" onClick={() => {
-                        navigate(`/viewProfile/${selectedProposal.freelancer}`)
-                      }}>open freelancer profile</button>
                     </div>
 
                     {/* Submission Date */}
@@ -361,7 +400,9 @@ const JobDetails = () => {
                       <Clock className="w-5 h-5" />
                       <span>
                         Submitted on{" "}
-                        {new Date(selectedProposal.submittedAt).toLocaleDateString()}
+                        {new Date(
+                          selectedProposal.submittedAt
+                        ).toLocaleDateString()}
                       </span>
                     </div>
 
@@ -382,9 +423,9 @@ const JobDetails = () => {
                     <div className="flex gap-4 pt-4">
                       {selectedProposal.status === "pending" && (
                         <motion.button
-                        onClick={() => {
-                          handleAcceptProposal(selectedProposal._id);
-                        }}
+                          onClick={() => {
+                            handleAcceptProposal(selectedProposal._id);
+                          }}
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
                           className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"

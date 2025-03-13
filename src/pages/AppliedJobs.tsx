@@ -112,7 +112,10 @@ const AppliedJobs = () => {
     );
   };
   
-  
+  const openChat = (toChatId: string) => {
+    
+    navigate(`/chatRoom/${toChatId}`)
+  }
 
   const toggleJobExpansion = (jobId: string) => {
     setExpandedJob(expandedJob === jobId ? null : jobId);
@@ -244,17 +247,35 @@ const AppliedJobs = () => {
                           </p>
 
                           <div
-                            className="mt-4 flex justify-end"
-                            onClick={() => {
-                              navigate(`/job/${job.job}`);
-                            }}
+                            className="mt-4 flex justify-end gap-2"
+                            
                           >
+                            <motion.button
+                              whileHover={{ scale: 1.02 }}
+                              whileTap={{ scale: 0.98 }}
+                              onClick={() => openChat(job.freelancer)}
+                              className="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-lg text-xs sm:text-sm font-medium hover:bg-blue-700 transition-colors"
+                            >
+                              Message employer
+                            </motion.button>
+
+                            <motion.button
+                              whileHover={{ scale: 1.02 }}
+                              onClick={() => {
+                                navigate(`/job/${job.job}`);
+                              }}
+                              whileTap={{ scale: 0.98 }}
+                              className="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-lg text-xs sm:text-sm font-medium hover:bg-blue-700 transition-colors"
+                            >
+                              View Full Details
+                            </motion.button>
+
                             <motion.button
                               whileHover={{ scale: 1.02 }}
                               whileTap={{ scale: 0.98 }}
                               className="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-lg text-xs sm:text-sm font-medium hover:bg-blue-700 transition-colors"
                             >
-                              View Full Details
+                              Withdraw Application
                             </motion.button>
                           </div>
                         </div>
